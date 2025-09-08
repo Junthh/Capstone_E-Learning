@@ -4,6 +4,7 @@ import { type RouteObject } from "react-router-dom";
 const HomeTemplate = lazy(() => import("@/pages/HomeTemplate"));
 const AuthTemplate = lazy(() => import("@/pages/AuthTemplate"));
 const LoginPage = lazy(() => import("@/pages/AuthTemplate/LoginPage"));
+const RegisterPage = lazy(() => import("@/pages/AuthTemplate/RegisterPage"));
 
 const withSuspense = (Component: LazyExoticComponent<FC>) => {
   return (
@@ -26,6 +27,10 @@ export const routes: RouteObject[] = [
         path: "login",
         element: withSuspense(LoginPage),
       },
+      {
+        path: "register",
+        element: withSuspense(RegisterPage),
+      }
     ],
   },
 
