@@ -1,0 +1,217 @@
+
+.wrap {
+  width: 100%;
+  height: 100vh; 
+  display: flex;
+  justify-content: center; 
+  align-items: center;     
+  font-family: 'Montserrat', system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+}
+
+.container {
+  background-color: #fff;
+  border-radius: 20px;
+  box-shadow: 0 32px 80px rgba(0,0,0,0.4);
+  position: relative;
+  overflow: hidden;
+
+  width: 90vw;       
+  max-width: 1600px;  
+  min-height: 65vh;   
+  transition: box-shadow .2s ease;
+}
+
+.formContainer {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  transition: all 0.6s ease-in-out;
+  width: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.signInContainer {
+  left: 0;
+  z-index: 2;
+}
+
+.containerRightActive .signInContainer {
+  transform: translateX(100%);
+}
+
+.signUpContainer {
+  left: 0;
+  opacity: 0;
+  z-index: 1;
+}
+
+.containerRightActive .signUpContainer {
+  transform: translateX(100%);
+  opacity: 1;
+  z-index: 5;
+  animation: show 0.6s;
+}
+
+@keyframes show {
+  0%, 49.99% { opacity: 0; z-index: 1; }
+  50%, 100%  { opacity: 1; z-index: 5; }
+}
+
+
+.form {
+  background-color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  padding: 0 80px;  
+  height: 100%;
+  text-align: center;
+  width: 100%;
+}
+
+.title {
+  font-weight: 800;
+  font-size: 32px;   
+  margin: 0 0 14px;
+}
+
+.helper {
+  font-size: 15px;
+  color: #555;
+  margin-bottom: 18px;
+}
+
+.field {
+  width: 100%;
+  margin: 14px 0;
+  text-align: left;
+}
+
+.label {
+  display: block;
+  font-size: 14px;
+  margin-bottom: 8px;
+  color: #444;
+}
+
+
+.input {
+  background-color: #eee !important;
+  border: none !important;
+  width: 100%;
+  padding: 18px 20px !important; 
+  font-size: 16px;
+  border-radius: 8px;
+  outline: none;
+}
+
+
+.error {
+  margin-top: 8px;
+  font-size: 13px;
+  color: #e11d48; 
+  min-height: 18px;
+}
+
+.btn {
+  border-radius: 28px !important;
+  border: 1px solid #FF4B2B !important;
+  background-color: #FF4B2B !important;
+  color: #FFFFFF !important;
+  font-size: 15px !important;
+  font-weight: 700 !important;
+  padding: 16px 64px !important; 
+  letter-spacing: 1px !important;
+  text-transform: uppercase !important;
+  transition: transform 80ms ease-in !important;
+  margin-top: 18px;
+}
+
+.btn:active { transform: scale(0.96); }
+
+
+.btnGhost {
+  background-color: transparent !important;
+  border-color: #FFFFFF !important;
+}
+
+.overlayContainer {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 50%;
+  height: 100%;
+  overflow: hidden;
+  transition: transform 0.6s ease-in-out;
+  z-index: 100;
+}
+
+.containerRightActive .overlayContainer { transform: translateX(-100%); }
+
+.overlay {
+  background: linear-gradient(to right, #FF4B2B, #FF416C);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: 0 0;
+  color: #FFFFFF;
+  position: relative;
+  left: -100%;
+  height: 100%;
+  width: 200%;
+  transform: translateX(0);
+  transition: transform 0.6s ease-in-out;
+}
+
+.containerRightActive .overlay { transform: translateX(50%); }
+
+.overlayPanel {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  padding: 0 48px;
+  text-align: center;
+  top: 0;
+  height: 100%;
+  width: 50%;
+  transform: translateX(0);
+  transition: transform 0.6s ease-in-out;
+}
+
+.overlayLeft { transform: translateX(-20%); }
+.containerRightActive .overlayLeft { transform: translateX(0); }
+
+.overlayRight { right: 0; }
+.containerRightActive .overlayRight { transform: translateX(20%); }
+
+
+.socialRow {
+  margin: 18px 0 10px;
+  display: flex;
+  gap: 12px;
+}
+
+.social {
+  border: 1px solid #DDDDDD;
+  border-radius: 50%;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  height: 44px; width: 44px;
+  color: #222;
+  text-decoration: none;
+  font-weight: 700;
+}
+
+.link {
+  color: #333;
+  font-size: 14px;
+  text-decoration: none;
+  margin: 12px 0 0;
+}
+
+
