@@ -1,8 +1,14 @@
-import { Input } from '@/components/ui/input'
-import React from 'react'
+
+import { Outlet } from "react-router-dom" 
+import Header from '@/components/ui/Header'
+import Footer from '@/components/ui/Footer'
 
 export default function HomeTemplate() {
   return (
-    <div>HomeTemplate</div>
+    <div >
+      <Header />
+      <Outlet />
+      <Footer />
+    </div>
   )
 }
