@@ -7,6 +7,8 @@ const HomePage = lazy(() => import("@/pages/HomeTemplate/HomePage"));
 const AuthTemplate = lazy(() => import("@/pages/AuthTemplate"));
 const LoginPage = lazy(() => import("@/pages/AuthTemplate/LoginPage"));
 const RegisterPage = lazy(() => import("@/pages/AuthTemplate/RegisterPage"));
+const CategoryPage = lazy(() => import("@/pages/HomeTemplate/CategoryPage"));
+const CourseDetailPage = lazy(() => import("@/pages/HomeTemplate/CourseDetailPage"));
 
 const withSuspense = (Component: LazyExoticComponent<FC>) => {
   return (
@@ -35,6 +37,14 @@ export const routes: RouteObject[] = [
       {
         index: true,
         element: withSuspense(HomePage),
+      },
+      {
+        path: "danh-muc/:maDanhMuc",
+        element: withSuspense(CategoryPage),
+      },
+      {
+        path: "khoa-hoc/:maKhoaHoc",
+        element: withSuspense(CourseDetailPage),
       },
     ],
   },
