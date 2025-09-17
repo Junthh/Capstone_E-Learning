@@ -2,6 +2,7 @@ import { Button } from '@/components/ui/button'
 import { Star, Users, Clock } from 'lucide-react'
 import type { Course } from '@/interfaces/course.interface'
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import NoImage from '@/assets/NoImage.png'
 
 interface CourseCardProps {
@@ -10,9 +11,17 @@ interface CourseCardProps {
 
 export default function CourseCard({ course }: CourseCardProps) {
   const [imgSrc, setImgSrc] = useState(course.hinhAnh || NoImage)
+  const navigate = useNavigate()
+
+  const handleRegisterClick = () => {
+    navigate(`/khoa-hoc/${course.maKhoaHoc}`)
+  }
 
   return (
-    <div className="bg-white rounded-lg shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-200 hover:border-orange-300">
+    <div 
+      className="bg-white rounded-lg shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-200 hover:border-orange-300 cursor-pointer"
+      onClick={handleRegisterClick}
+    >
       <div className="relative">
         <img
           src={imgSrc}
@@ -29,7 +38,7 @@ export default function CourseCard({ course }: CourseCardProps) {
       </div>
 
       <div className="p-6">
-        <h3 className="font-semibold text-gray-900 mb-2 line-clamp-2 min-h-[3rem]">
+        <h3 className="font-semibold text-gray-900 mb-2 line-clamp-2 min-h-[3rem] hover:text-orange-600 transition-colors">
           {course.tenKhoaHoc}
         </h3>
 
@@ -61,7 +70,13 @@ export default function CourseCard({ course }: CourseCardProps) {
           </div>
         </div>
 
-        <Button className="w-full bg-yellow-400 hover:bg-yellow-500 text-black font-semibold">
+        <Button 
+          className="w-full bg-yellow-400 hover:bg-yellow-500 text-black font-semibold"
+          onClick={(e) => {
+            e.stopPropagation() // Prevent card click when button is clicked
+            handleRegisterClick()
+          }}
+        >
           ĐĂNG KÝ
         </Button>
       </div>
