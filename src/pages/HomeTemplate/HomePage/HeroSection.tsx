@@ -2,12 +2,16 @@ import { Button } from '@/components/ui/button'
 import { Play } from 'lucide-react'
 
 export default function HeroSection() {
+
+  // hàm scroll đến phần khóa học khi click vào xem khóa học
   const handleScrollToCourses = () => {
     const coursesSection = document.getElementById("courses-section")
     if (coursesSection) {
       coursesSection.scrollIntoView({ behavior: "smooth" })
     }
   }
+
+  // phần banner trang chủ
   return (
     <section className="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white py-20 relative overflow-hidden">
       <div className="absolute inset-0 opacity-10">
@@ -45,18 +49,15 @@ export default function HeroSection() {
               >
                 Xem khóa học
               </Button>
-              <a
-                href="https://www.facebook.com/messages/t/231169113737422"
-                target="_blank"
+              <Button 
+                size="lg"
+                variant="outline"
+                className="bg-white text-black hover:bg-gray-400 font-semibold px-8 py-4 text-lg"
+                onClick={() => window.open("https://www.facebook.com/messages/t/231169113737422", "_blank")}
               >
-                <Button 
-                  size="lg"
-                  variant="outline"
-                  className="bg-white text-black hover:bg-gray-400 px-8 py-4 text-lg"
-                >
-                  Tư vấn học
-                </Button>
-              </a>
+                Tư vấn học
+              </Button>
+
             </div>
           </div>
 

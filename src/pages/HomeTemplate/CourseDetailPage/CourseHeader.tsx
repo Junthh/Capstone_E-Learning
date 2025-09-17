@@ -5,7 +5,7 @@ import NoImage from '@/assets/NoImage.png'
 import type { Course } from '@/interfaces/course.interface'
 
 export default function CourseHeader({ course }: { course: Course }) {
-  const [imgSrc, setImgSrc] = useState(course.hinhAnh || NoImage)
+  const [imgSrc, setImgSrc] = useState(course.hinhAnh)
 
   return (
     <section className="bg-gradient-to-r from-slate-900 to-slate-800 text-white py-16">
@@ -65,7 +65,7 @@ export default function CourseHeader({ course }: { course: Course }) {
     </section>
   )
 }
-
+// component hiển thị thông tin từng mục thống kê 
 function Stat({ icon, value, label }: { icon: React.ReactNode, value: React.ReactNode, label: string }) {
   return (
     <div className="text-center">

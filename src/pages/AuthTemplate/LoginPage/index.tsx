@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Loader2 } from 'lucide-react'
 import { useForm } from "react-hook-form";
 import z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -50,66 +51,58 @@ export default function LoginPage() {
       >
         {/* SIGN UP (bên trái ẩn, để đúng hiệu ứng; bạn có thể navigate tới /auth/register) */}
         <div className={`${styles.formContainer} ${styles.signUpContainer}`}>
-          <form className={styles.form} onSubmit={(e) => e.preventDefault()}>
-            <h1 className={styles.title}>Tạo tài khoản</h1>
-            <p className={styles.helper}>Hoặc đăng ký bằng email của bạn</p>
-
-            <div className={styles.socialRow}>
-              <a className={styles.social} href="#" aria-label="Facebook">f</a>
-              <a className={styles.social} href="#" aria-label="Google">G</a>
-              <a className={styles.social} href="#" aria-label="LinkedIn">in</a>
+          <div className="flex items-center justify-center py-20">
+            <div className="flex flex-col items-center space-y-4">
+              <Loader2 className="w-10 h-10 animate-spin text-orange-500" />
+              <p className="text-gray-600 text-lg font-medium">
+                Đang tải form đăng ký...
+              </p>
             </div>
-
-            <Button
-              type="button"
-              className={`${styles.btn}`}
-              onClick={() => navigate("/auth/register")}
-            >
-              Đăng ký
-            </Button>
-          </form>
+          </div>
         </div>
 
         {/* SIGN IN */}
-        <div className={`${styles.formContainer} ${styles.signInContainer}`}>
-          <form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
-            <h1 className={styles.title}>Đăng nhập</h1>
-            <p className={styles.helper}>Hoặc dùng tài khoản của bạn</p>
+        {!rightActive && (
+          <div className={`${styles.formContainer} ${styles.signInContainer}`}>
+            <form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
+              <h1 className={styles.title}>Đăng nhập</h1>
+              <p className={styles.helper}>Hoặc dùng tài khoản của bạn</p>
 
-            <div className={styles.socialRow}>
-              <a className={styles.social} href="#" aria-label="Facebook">f</a>
-              <a className={styles.social} href="#" aria-label="Google">G</a>
-              <a className={styles.social} href="#" aria-label="LinkedIn">in</a>
-            </div>
+              <div className={styles.socialRow}>
+                <a className={styles.social} href="#" aria-label="Facebook">f</a>
+                <a className={styles.social} href="#" aria-label="Google">G</a>
+                <a className={styles.social} href="#" aria-label="LinkedIn">in</a>
+              </div>
 
-            <div className={styles.field}>
-              <label className={styles.label}>Tài khoản</label>
-              <Input
-                placeholder="Nhập tài khoản"
-                className={styles.input}
-                {...register("taiKhoan")}
-              />
-              <div className={styles.error}>{errors.taiKhoan?.message}</div>
-            </div>
+              <div className={styles.field}>
+                <label className={styles.label}>Tài khoản</label>
+                <Input
+                  placeholder="Nhập tài khoản"
+                  className={styles.input}
+                  {...register("taiKhoan")}
+                />
+                <div className={styles.error}>{errors.taiKhoan?.message}</div>
+              </div>
 
-            <div className={styles.field}>
-              <label className={styles.label}>Mật khẩu</label>
-              <Input
-                type="password"
-                placeholder="Nhập mật khẩu"
-                className={styles.input}
-                {...register("matKhau")}
-              />
-              <div className={styles.error}>{errors.matKhau?.message}</div>
-            </div>
+              <div className={styles.field}>
+                <label className={styles.label}>Mật khẩu</label>
+                <Input
+                  type="password"
+                  placeholder="Nhập mật khẩu"
+                  className={styles.input}
+                  {...register("matKhau")}
+                />
+                <div className={styles.error}>{errors.matKhau?.message}</div>
+              </div>
 
-            <a className={styles.link} href="#">Quên mật khẩu?</a>
+              <a className={styles.link} href="#">Quên mật khẩu?</a>
 
-            <Button type="submit" className={styles.btn} disabled={isPending}>
-              {isPending ? "Đang đăng nhập..." : "Đăng nhập"}
-            </Button>
-          </form>
-        </div>
+              <Button type="submit" className={styles.btn} disabled={isPending}>
+                {isPending ? "Đang đăng nhập..." : "Đăng nhập"}
+              </Button>
+            </form>
+          </div>
+        )}
 
         {/* OVERLAY */}
         <div className={styles.overlayContainer}>
@@ -131,7 +124,12 @@ export default function LoginPage() {
               <Button
                 type="button"
                 className={`${styles.btn} ${styles.btnGhost}`}
-                onClick={() => setRightActive(true)}
+                onClick={() => {
+                  setRightActive(true)
+                  setTimeout(() => {
+                    navigate("/auth/register")      // chờ 1400ms rồi mới điều hướng
+                  }, 1400) 
+                }}
               >
                 Đăng ký
               </Button>

@@ -11,12 +11,14 @@ export default function CourseDetailPage() {
   const { maKhoaHoc } = useParams<{ maKhoaHoc: string }>()
   const navigate = useNavigate()
 
+  // call api lấy chi tiết khóa học dựa vào mã khóa học từ params 
   const { data: course, isLoading, error } = useQuery({
     queryKey: ['course-detail', maKhoaHoc],
     queryFn: () => getCourseDetailApi(maKhoaHoc!),
     enabled: !!maKhoaHoc,
   })
 
+  // hiển thị thông báo lỗi nếu có lỗi xảy ra
   if (error) {
     return (
       <div className="min-h-screen bg-gray-50 py-16 flex flex-col items-center">
@@ -28,6 +30,7 @@ export default function CourseDetailPage() {
     )
   }
 
+  // hiển thị loader khi đang tải dữ liệu
   if (isLoading) {
     return (
       <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center">
@@ -37,6 +40,7 @@ export default function CourseDetailPage() {
     )
   }
 
+  // hiển thị thông báo nếu không tìm thấy khóa học
   if (!course) {
     return (
       <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center">

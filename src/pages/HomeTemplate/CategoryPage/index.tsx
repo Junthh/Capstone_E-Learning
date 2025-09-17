@@ -1,20 +1,20 @@
-import { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+
+import { useParams, useNavigate } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
 import { getCoursesByCategoryApi } from '@/services/course.api'
 import { getCategoriesApi } from '@/services/category.api'
 import CourseCard from '../HomePage/CourseCard'
-import { Loader2, BookOpen } from 'lucide-react'
-
+import { Loader2, BookOpen, ArrowLeft } from 'lucide-react'
+import { Button } from '@/components/ui/button'
 export default function CategoryPage() {
   const { maDanhMuc } = useParams<{ maDanhMuc: string }>()
-  const [categoryName, setCategoryName] = useState<string>('')
-
+  const navigate = useNavigate()
+  // call api lấy danh sách danh mục khóa học 
   const { data: categories } = useQuery({
     queryKey: ['categories'],
     queryFn: getCategoriesApi,
   })
-
+  // call api lấy danh sách khóa học theo danh mục
   const { 
     data: courses = [], 
     isLoading, 
@@ -25,16 +25,11 @@ export default function CategoryPage() {
     enabled: !!maDanhMuc,
   })
 
-  // Lọc bỏ khóa học không có maKhoaHoc
+  // LỌc bỏ khóa học không có maKhoaHoc
   const filteredCourses = courses.filter(c => c.maKhoaHoc && c.maKhoaHoc.trim() !== '')
-
-  useEffect(() => {
-    if (categories && maDanhMuc) {
-      const category = categories.find(cat => cat.maDanhMuc === maDanhMuc)
-      setCategoryName(category?.tenDanhMuc || 'Danh mục không tồn tại')
-    }
-  }, [categories, maDanhMuc])
-
+  // cập nhật tên danh mục
+  const categoryName = categories?.find(cat => cat.maDanhMuc === maDanhMuc)?.tenDanhMuc || 'Danh mục không tồn tại'
+  // lỗi
   if (error) {
     return (
       <div className="min-h-screen bg-gray-50 py-16">
@@ -53,6 +48,18 @@ export default function CategoryPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      <div className="bg-white border-b">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+          <Button 
+            variant="ghost" 
+            onClick={() => navigate(-1)}
+            className="mb-2 hover:bg-gray-100"
+          >
+            <ArrowLeft className="w-4 h-4 mr-2" />
+            Quay lại
+          </Button>
+        </div>
+      </div>
       <section className="bg-gradient-to-r from-orange-500 to-orange-600 text-white py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">

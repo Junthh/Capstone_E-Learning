@@ -10,13 +10,15 @@ interface CourseCardProps {
 }
 
 export default function CourseCard({ course }: CourseCardProps) {
-  const [imgSrc, setImgSrc] = useState(course.hinhAnh || NoImage)
+  const [imgSrc, setImgSrc] = useState(course.hinhAnh)
   const navigate = useNavigate()
 
+  // hàm xử lý khi click vào đăng ký khóa học sẽ nhảy sang trang chi tiết khóa học 
   const handleRegisterClick = () => {
     navigate(`/khoa-hoc/${course.maKhoaHoc}`)
   }
 
+  // hiển thị thông tin từng khóa học
   return (
     <div 
       className="bg-white rounded-lg shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-200 hover:border-orange-300 cursor-pointer"
@@ -73,7 +75,7 @@ export default function CourseCard({ course }: CourseCardProps) {
         <Button 
           className="w-full bg-yellow-400 hover:bg-yellow-500 text-black font-semibold"
           onClick={(e) => {
-            e.stopPropagation() // Prevent card click when button is clicked
+            e.stopPropagation() // ngăn chặn sự kiện click lan ra thẻ cha 
             handleRegisterClick()
           }}
         >

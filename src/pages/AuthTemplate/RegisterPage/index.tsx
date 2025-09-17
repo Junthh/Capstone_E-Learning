@@ -122,21 +122,6 @@ export default function RegisterPage() {
           </form>
         </div>
 
-        {/* SIGN IN (chỉ để giữ hiệu ứng overlay) */}
-        <div className={`${styles.formContainer} ${styles.signInContainer}`}>
-          <form className={styles.form} onSubmit={(e) => e.preventDefault()}>
-            <h1 className={styles.title}>Đăng nhập</h1>
-            <p className={styles.helper}>Đã có tài khoản? Đăng nhập ngay</p>
-            <Button
-              type="button"
-              className={styles.btn}
-              onClick={() => navigate("/auth/login")}
-            >
-              Đăng nhập
-            </Button>
-          </form>
-        </div>
-
         {/* OVERLAY */}
         <div className={styles.overlayContainer}>
           <div className={styles.overlay}>
