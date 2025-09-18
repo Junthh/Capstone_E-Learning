@@ -1,3 +1,4 @@
+// src/routes/index.tsx
 import { lazy, Suspense, type FC, type LazyExoticComponent } from "react";
 import { type RouteObject } from "react-router-dom";
 import { Loader2 } from "lucide-react"
@@ -10,6 +11,7 @@ const RegisterPage = lazy(() => import("@/pages/AuthTemplate/RegisterPage"));
 const CategoryPage = lazy(() => import("@/pages/HomeTemplate/CategoryPage"));
 const CourseDetailPage = lazy(() => import("@/pages/HomeTemplate/CourseDetailPage"));
 const SearchPage = lazy(() => import("@/pages/HomeTemplate/SearchPage"));
+const UserProfilePage = lazy(() => import("@/pages/HomeTemplate/UserProfilePage"));
 
 const withSuspense = (Component: LazyExoticComponent<FC>) => {
   return (
@@ -50,6 +52,10 @@ export const routes: RouteObject[] = [
       {
         path: "tim-kiem",
         element: withSuspense(SearchPage),
+      },
+      {
+        path: "thong-tin-ca-nhan",
+        element: withSuspense(UserProfilePage),
       },
     ],
   },

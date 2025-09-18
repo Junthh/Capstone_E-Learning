@@ -54,6 +54,7 @@ export default function Header() {
   // handle chuyển qua compoent profile
   const handleProfileClick = () => {
     setIsUserMenuOpen(false)
+    navigate('/thong-tin-ca-nhan')
   }
   // handle chuyển qua compoent quản lý khóa học
   const handleCoursesManagementClick = () => {
