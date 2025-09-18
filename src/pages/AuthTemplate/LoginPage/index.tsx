@@ -66,14 +66,6 @@ export default function LoginPage() {
           <div className={`${styles.formContainer} ${styles.signInContainer}`}>
             <form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
               <h1 className={styles.title}>Đăng nhập</h1>
-              <p className={styles.helper}>Hoặc dùng tài khoản của bạn</p>
-
-              <div className={styles.socialRow}>
-                <a className={styles.social} href="#" aria-label="Facebook">f</a>
-                <a className={styles.social} href="#" aria-label="Google">G</a>
-                <a className={styles.social} href="#" aria-label="LinkedIn">in</a>
-              </div>
-
               <div className={styles.field}>
                 <label className={styles.label}>Tài khoản</label>
                 <Input
