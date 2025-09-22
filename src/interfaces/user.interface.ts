@@ -4,6 +4,7 @@ export interface UserInfo {
   matKhau: string;
   hoTen: string;
   soDT: string;
+  soDt: string;
   maLoaiNguoiDung: string;
   maNhom: string;
   email: string;

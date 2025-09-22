@@ -1,11 +1,48 @@
 import { Button } from '@/components/ui/button'
-import { Users, Eye, Calendar, Star, User,  } from 'lucide-react'
+import { Users, Eye, Calendar, Star, User, Loader2 } from 'lucide-react'
 import { useState } from 'react'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useNavigate } from 'react-router-dom'
+import { toast } from 'sonner'
 import NoImage from '@/assets/NoImage.png'
 import type { Course } from '@/interfaces/course.interface'
+import { useAuthStore } from '@/store/auth.store'
+import { registerCourseApi } from '@/services/course.api'
 
 export default function CourseHeader({ course }: { course: Course }) {
   const [imgSrc, setImgSrc] = useState(course.hinhAnh)
+  const { user } = useAuthStore()
+  const navigate = useNavigate()
+  const queryClient = useQueryClient()
+
+  // Mutation để đăng ký khóa học
+  const { mutate: registerCourse, isPending: isRegistering } = useMutation({
+    mutationFn: registerCourseApi,
+    onSuccess: () => {
+      toast.success('Đăng ký khóa học thành công!')
+      // Invalidate các query liên quan
+      queryClient.invalidateQueries({ queryKey: ['user-courses'] })
+    },
+    onError: (error: any) => {
+      const errorMessage = error?.response?.data?.message || 'Đăng ký khóa học thất bại!'
+      toast.error(errorMessage)
+    },
+  })
+
+  // Xử lý đăng ký khóa học
+  const handleRegisterCourse = () => {
+    if (!user) {
+      // Nếu chưa đăng nhập thì chuyển đến trang login
+      navigate('/auth/login')
+      return
+    }
+
+    // Đăng ký khóa học
+    registerCourse({
+      maKhoaHoc: course.maKhoaHoc,
+      taiKhoan: user.taiKhoan,
+    })
+  }
 
   return (
     <section className="bg-gradient-to-r from-slate-900 to-slate-800 text-white py-16">
@@ -22,12 +59,14 @@ export default function CourseHeader({ course }: { course: Course }) {
               {course.moTa}
             </p>
           </div>
+          
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <Stat icon={<Users />} value={course.soLuongHocVien} label="Học viên" />
             <Stat icon={<Eye />} value={course.luotXem?.toLocaleString()} label="Lượt xem" />
             <Stat icon={<Calendar />} value={course.ngayTao} label="Ngày tạo" />
             <Stat icon={<Star className="fill-current" />} value="4.8" label="Đánh giá" />
           </div>
+          
           <div className="bg-slate-800 rounded-lg p-6">
             <h3 className="text-lg font-semibold mb-3 flex items-center">
               <User className="w-5 h-5 mr-2 text-yellow-400" /> Giảng viên
@@ -42,15 +81,29 @@ export default function CourseHeader({ course }: { course: Course }) {
               </div>
             </div>
           </div>
+          
           <div className="flex flex-col sm:flex-row gap-4">
-            <Button size="lg" className="bg-yellow-500 hover:bg-yellow-600 text-black font-semibold px-8 py-4 text-lg">
-              ĐĂNG KÝ NGAY
+            <Button 
+              size="lg" 
+              className="bg-yellow-500 hover:bg-yellow-600 text-black font-semibold px-8 py-4 text-lg disabled:opacity-50 disabled:cursor-not-allowed"
+              onClick={handleRegisterCourse}
+              disabled={isRegistering}
+            >
+              {isRegistering ? (
+                <>
+                  <Loader2 className="w-5 h-5 mr-2 animate-spin" />
+                  Đang đăng ký...
+                </>
+              ) : (
+                'ĐĂNG KÝ NGAY'
+              )}
             </Button>
             <Button size="lg" variant="outline" className="bg-transparent border-white text-white hover:bg-white hover:text-black px-8 py-4 text-lg">
               XEM DEMO
             </Button>
           </div>
         </div>
+        
         <div className="relative">
           <div className="relative bg-gradient-to-br from-slate-700 to-slate-800 rounded-2xl p-8 shadow-2xl">
             <img
@@ -65,6 +118,7 @@ export default function CourseHeader({ course }: { course: Course }) {
     </section>
   )
 }
+
 // component hiển thị thông tin từng mục thống kê 
 function Stat({ icon, value, label }: { icon: React.ReactNode, value: React.ReactNode, label: string }) {
   return (

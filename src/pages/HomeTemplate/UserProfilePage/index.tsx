@@ -49,7 +49,12 @@ export default function UserProfilePage() {
     onSuccess: (updatedUser) => {
       if (currentUser) {
         setUser({
-          ...updatedUser,
+          email: updatedUser.email,
+          hoTen: updatedUser.hoTen,
+          taiKhoan: updatedUser.taiKhoan,
+          soDT: updatedUser.soDt,
+          maLoaiNguoiDung: updatedUser.maLoaiNguoiDung,
+          maNhom: updatedUser.maNhom,
           accessToken: currentUser.accessToken,
         })
       }

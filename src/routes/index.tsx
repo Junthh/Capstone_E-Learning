@@ -12,6 +12,7 @@ const CategoryPage = lazy(() => import("@/pages/HomeTemplate/CategoryPage"));
 const CourseDetailPage = lazy(() => import("@/pages/HomeTemplate/CourseDetailPage"));
 const SearchPage = lazy(() => import("@/pages/HomeTemplate/SearchPage"));
 const UserProfilePage = lazy(() => import("@/pages/HomeTemplate/UserProfilePage"));
+const CourseManagementPage = lazy(() => import("@/pages/HomeTemplate/CourseManagementPage"));
 
 const withSuspense = (Component: LazyExoticComponent<FC>) => {
   return (
@@ -56,6 +57,10 @@ export const routes: RouteObject[] = [
       {
         path: "thong-tin-ca-nhan",
         element: withSuspense(UserProfilePage),
+      },
+      {
+        path: "quan-ly-khoa-hoc",
+        element: withSuspense(CourseManagementPage),
       },
     ],
   },

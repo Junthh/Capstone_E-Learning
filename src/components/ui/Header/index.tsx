@@ -59,6 +59,7 @@ export default function Header() {
   // handle chuyển qua compoent quản lý khóa học
   const handleCoursesManagementClick = () => {
     setIsUserMenuOpen(false)
+    navigate('/quan-ly-khoa-hoc')
   }
 
   return (
