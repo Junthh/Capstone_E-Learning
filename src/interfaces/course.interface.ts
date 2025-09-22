@@ -19,3 +19,35 @@ export interface Course {
     tenDanhMucKhoaHoc: string;
   };
 }
+
+export interface RegisterCourseRequest {
+  maKhoaHoc: string;
+  taiKhoan: string;
+}
+
+export interface UnregisterCourseRequest {
+  maKhoaHoc: string;
+  taiKhoan: string;
+}
+
+export interface UserCourseDetail {
+  chiTietKhoaHocGhiDanh: RegisteredCourse[];
+  taiKhoan: string;
+  matKhau: string;
+  hoTen: string;
+  soDT: string;
+  maLoaiNguoiDung: string;
+  maNhom: string;
+  email: string;
+}
+
+export interface RegisteredCourse {
+  maKhoaHoc: string;
+  tenKhoaHoc: string;
+  biDanh: string;
+  moTa: string;
+  luotXem: number;
+  hinhAnh: string;
+  ngayTao: string;
+  danhGia: number;
+}

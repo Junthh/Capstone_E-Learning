@@ -7,14 +7,16 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import styles from "../LoginPage/LoginPage.module.css"; // tái sử dụng CSS
+import { registerApi } from "@/services/auth.api";
 
 // schema validate
 const schema = z.object({
   taiKhoan: z.string().nonempty("Tài khoản không được để trống"),
   matKhau: z.string().min(6, "Mật khẩu tối thiểu 6 ký tự"),
-  email: z.string().email("Email không hợp lệ"),
-  soDt: z.string().nonempty("Số điện thoại không được để trống"),
   hoTen: z.string().nonempty("Họ tên không được để trống"),
+  soDt: z.string().nonempty("Số điện thoại không được để trống"),
+  maNhom: z.literal("GP01"),
+  email: z.string().email("Email không hợp lệ"),
 });
 
 type RegisterInputs = z.infer<typeof schema>;
@@ -24,11 +26,7 @@ export default function RegisterPage() {
   const navigate = useNavigate();
 
   const { mutate: handleRegister, isPending } = useMutation({
-    mutationFn: async (data: RegisterInputs) => {
-      // TODO: gọi API register
-      console.log("payload register", data);
-      return data;
-    },
+    mutationFn: (data: RegisterInputs) => registerApi(data),
     onSuccess: () => {
       navigate("/auth/login"); // sau khi đăng ký thành công
     },
@@ -43,9 +41,10 @@ export default function RegisterPage() {
     defaultValues: {
       taiKhoan: "",
       matKhau: "",
-      email: "",
-      soDt: "",
       hoTen: "",
+      soDt: "",
+      maNhom: "GP01",
+      email: "",
     },
   });
 
@@ -118,21 +117,6 @@ export default function RegisterPage() {
 
             <Button type="submit" className={styles.btn} disabled={isPending}>
               {isPending ? "Đang đăng ký..." : "Đăng ký"}
-            </Button>
-          </form>
-        </div>
-
-        {/* SIGN IN (chỉ để giữ hiệu ứng overlay) */}
-        <div className={`${styles.formContainer} ${styles.signInContainer}`}>
-          <form className={styles.form} onSubmit={(e) => e.preventDefault()}>
-            <h1 className={styles.title}>Đăng nhập</h1>
-            <p className={styles.helper}>Đã có tài khoản? Đăng nhập ngay</p>
-            <Button
-              type="button"
-              className={styles.btn}
-              onClick={() => navigate("/auth/login")}
-            >
-              Đăng nhập
             </Button>
           </form>
         </div>

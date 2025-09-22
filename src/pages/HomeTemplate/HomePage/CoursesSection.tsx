@@ -7,13 +7,16 @@ import { getCourseListApi } from '@/services/course.api'
 export default function CoursesSection() {
   const [visibleCount, setVisibleCount] = useState(8) // số lượng hiển thị ban đầu sẽ là 8 khóa học
 
+  // call api lấy danh sách khóa học
   const { data: courses = [] } = useQuery({
     queryKey: ['courses'],
     queryFn: getCourseListApi,
   })
 
+  // lọc bỏ các khóa học có maKhoaHoc rỗng hoặc null
   const filteredCourses = courses.filter(course => course.maKhoaHoc && course.maKhoaHoc.trim() !== '')
 
+  // hàm load thêm khóa học khi click vào xem thêm
   const handleLoadMore = () => {
     setVisibleCount(prev => prev + 8)
   }

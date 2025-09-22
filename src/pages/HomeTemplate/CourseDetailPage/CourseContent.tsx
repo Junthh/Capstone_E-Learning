@@ -6,8 +6,6 @@ export default function CourseContent({ course }: { course: Course }) {
   return (
     <section className="py-16">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-3 gap-12">
-        
-        {/* Nội dung chính */}
         <div className="lg:col-span-2 space-y-8">
           <div className="bg-white rounded-lg shadow-md p-8">
             <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center">
@@ -18,7 +16,6 @@ export default function CourseContent({ course }: { course: Course }) {
               <p className="text-gray-700 leading-relaxed text-lg mb-6">
                 {course.moTa}
               </p>
-              
               <h3 className="text-xl font-semibold text-gray-900 mb-4">Bạn sẽ học được gì?</h3>
               <ul className="space-y-3 text-gray-700">
                 <li>✅ Nắm vững kiến thức cơ bản và nâng cao</li>
@@ -29,8 +26,6 @@ export default function CourseContent({ course }: { course: Course }) {
             </div>
           </div>
         </div>
-
-        {/* Sidebar */}
         <div className="space-y-6">
           <div className="bg-white rounded-lg shadow-md p-6">
             <h3 className="text-lg font-semibold text-gray-900 mb-4">Thông tin khóa học</h3>
@@ -56,7 +51,7 @@ export default function CourseContent({ course }: { course: Course }) {
     </section>
   )
 }
-
+// component hiển thị thông tin từng mục trong phần thông tin khóa học
 function Info({ label, value }: { label: string, value: string }) {
   return (
     <div className="flex justify-between">
