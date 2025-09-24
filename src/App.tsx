@@ -2,6 +2,7 @@
 import { useRoutes } from 'react-router-dom';
 import './App.css';
 import { routes } from './routes';
+import { Toaster } from "sonner";
 
 
 function App() {
@@ -9,6 +10,7 @@ function App() {
   return (
     <>
       {routerElements}
+      <Toaster richColors position="top-right" />
     </>
   )
 }

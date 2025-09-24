@@ -13,6 +13,8 @@ const CourseDetailPage = lazy(() => import("@/pages/HomeTemplate/CourseDetailPag
 const SearchPage = lazy(() => import("@/pages/HomeTemplate/SearchPage"));
 const UserProfilePage = lazy(() => import("@/pages/HomeTemplate/UserProfilePage"));
 const CourseManagementPage = lazy(() => import("@/pages/HomeTemplate/CourseManagementPage"));
+const AdminTemplate = lazy(() => import("@/pages/AdminTemplate"));
+const UserMangement = lazy(() => import("@/pages/AdminTemplate/UserMangement"));
 
 const withSuspense = (Component: LazyExoticComponent<FC>) => {
   return (
@@ -78,7 +80,17 @@ export const routes: RouteObject[] = [
       }
     ],
   },
-
+  {
+    path: "/admin",
+    element: withSuspense(AdminTemplate),
+    children: [
+      {
+        path: "user-management",
+        element: withSuspense(UserMangement),
+      },
+      
+    ],
+  },
   {
     path: "*",
     element: <div>Not Found</div>,
