@@ -25,6 +25,7 @@ export const useAuthStore = create<AuthStore>((set) => ({
     if (user) {
       localStorage.setItem("user", JSON.stringify(user));
       set({ user });
+      console.log("user", user)
     }
   },
   clearUser: () => {

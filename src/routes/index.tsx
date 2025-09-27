@@ -15,6 +15,7 @@ const UserProfilePage = lazy(() => import("@/pages/HomeTemplate/UserProfilePage"
 const CourseManagementPage = lazy(() => import("@/pages/HomeTemplate/CourseManagementPage"));
 const AdminTemplate = lazy(() => import("@/pages/AdminTemplate"));
 const UserMangement = lazy(() => import("@/pages/AdminTemplate/UserMangement"));
+const CourseMangement = lazy(() => import("@/pages/AdminTemplate/CourseManagement"));
 
 const withSuspense = (Component: LazyExoticComponent<FC>) => {
   return (
@@ -88,7 +89,10 @@ export const routes: RouteObject[] = [
         path: "user-management",
         element: withSuspense(UserMangement),
       },
-      
+      {
+        path: "course-management",
+        element: withSuspense(CourseMangement),
+      }
     ],
   },
   {

@@ -27,6 +27,7 @@ import type { pageResult } from "@/interfaces/pageResult.interface";
 import type { User } from "@/interfaces/user.interface";
 import { toast } from "sonner";
 import RegisterCourse from "./RegisterCourse/RegisterCourse";
+import styles from "./UserManagement.module.css"
 
 const normalizeVN = (s: string) =>
   (s || "")
@@ -238,8 +239,6 @@ export default function UserManagement() {
           {/* Dialog registerCourse */}
           <Dialog open={openRegister} onOpenChange={setOpenRegister}>
             <DialogContent className="sm:max-w-[820px]">
-              {" "}
-              {/* rộng hơn cho bảng */}
               <DialogHeader>
                 <DialogTitle className="text-xl">Ghi danh khoá học</DialogTitle>
               </DialogHeader>
@@ -330,7 +329,7 @@ export default function UserManagement() {
                       <Button
                         size="lg"
                         variant="outline"
-                        className="text-lg bg-green-600 text-white hover:bg-green-700 hover:text-white cursor-pointer"
+                        className={`${styles.iconAction} text-lg bg-green-600 text-white hover:bg-green-700 hover:text-white cursor-pointer`}
                         onClick={() => handleRegisterCourse(u.taiKhoan)}
                       >
                         Ghi Danh
@@ -339,7 +338,7 @@ export default function UserManagement() {
                       <Button
                         size="lg"
                         variant="outline"
-                        className="text-lg bg-yellow-400 text-black hover:bg-yellow-500 cursor-pointer"
+                        className={`${styles.iconAction} text-lg bg-yellow-400 text-black hover:bg-yellow-500 cursor-pointer`}
                         onClick={() => handleEditUser(u.taiKhoan)}
                       >
                         Sửa
@@ -348,7 +347,7 @@ export default function UserManagement() {
                       <Button
                         size="lg"
                         variant="outline"
-                        className="text-lg bg-red-600 text-white hover:bg-red-700 hover:text-white cursor-pointer"
+                        className={`${styles.iconAction} text-lg bg-red-600 text-white hover:bg-red-700 hover:text-white cursor-pointer`}
                         onClick={() => handleDeleteUser(u.taiKhoan)}
                       >
                         {deletingId === u.taiKhoan ? "Đang xoá..." : "Xoá"}

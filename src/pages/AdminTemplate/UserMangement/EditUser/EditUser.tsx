@@ -91,7 +91,7 @@ export default function EditUser({ taiKhoan, onSuccess, onCancel }: Props) {
     });
   }, [userSearch, reset]);
 
-  const { mutate: handleEditUser, isPending } = useMutation({
+  const { mutate: handleEditUser } = useMutation({
     mutationFn: (payload: EditUserForm) => updateUserApi(payload),
     onSuccess: () => {
       toast.success("Cập nhật người dùng thành công ✅");
