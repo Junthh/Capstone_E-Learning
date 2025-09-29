@@ -34,7 +34,7 @@ type Props = {
 };
 
 
-export default function AddUser({onSuccess, onCancel}: Props) {
+export default function AddCourse({onSuccess, onCancel}: Props) {
   const {
     handleSubmit,
     register,
