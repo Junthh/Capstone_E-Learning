@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/select";
 import { InputWithIcon } from "../../_Components/InputWithIcon";
 import {
-  BookOpen, Tag, FileText, Eye, Star, Calendar, User as UserIcon, List, Image as ImageIcon,
+  BookOpen, Tag, FileText, Eye, Star, Calendar, List, Image as ImageIcon,
 } from "lucide-react";
 import z from "zod";
 import { useMutation, useQuery } from "@tanstack/react-query";
@@ -18,7 +18,6 @@ import { toast } from "sonner";
 import type { DetailCourse } from "@/interfaces/course.interface";
 import { useAuthStore } from "@/store/auth.store";
 
-/** URL ảnh http/https */
 const imageUrlPattern = /^https?:\/\/.+\.(png|jpe?g|webp|gif)$/i;
 
 const schema = z.object({
@@ -37,9 +36,7 @@ const schema = z.object({
   hinhAnh: z.string().min(1, "Vui lòng dán URL ảnh").regex(imageUrlPattern, "Hình ảnh phải là URL http/https hợp lệ (.png/.jpg/.jpeg/.webp/.gif)"),
   maNhom: z.string().min(1, "Vui lòng nhập mã nhóm"),
   ngayTao: z.string().min(1, "Vui lòng chọn ngày tạo"),
-  /** ✅ đúng key theo body */
   maDanhMucKhoaHoc: z.string().min(1, "Vui lòng chọn danh mục"),
-  /** ✅ đúng key theo body */
   taiKhoanNguoiTao: z.string().min(1, "Thiếu tài khoản người tạo"),
 });
 
@@ -99,11 +96,10 @@ export default function EditCourse({ maKhoaHoc, onSuccess, onCancel }: Props) {
       maNhom: "GP01",
       ngayTao: "",
       maDanhMucKhoaHoc: "",
-      taiKhoanNguoiTao: taiKhoanDangNhap, // điền sẵn từ store
+      taiKhoanNguoiTao: taiKhoanDangNhap, 
     },
   });
 
-  // fill form
   useEffect(() => {
     if (!courseDetail) return;
     setValue("maKhoaHoc", courseDetail.maKhoaHoc);
@@ -116,31 +112,27 @@ export default function EditCourse({ maKhoaHoc, onSuccess, onCancel }: Props) {
     setValue("maNhom", courseDetail.maNhom ?? "GP01");
     setValue("ngayTao", toYYYYMMDD(courseDetail.ngayTao ?? ""));
 
-    // cố gắng lấy đúng mã danh mục cho Select + body
     const maDM =
       (courseDetail as any)?.maDanhMucKhoaHoc ||
       courseDetail?.danhMucKhoaHoc?.maDanhMucKhoahoc ||
       (courseDetail as any)?.maDanhMuc ||
       "";
     setValue("maDanhMucKhoaHoc", String(maDM));
-
-    // luôn set lại tài khoản người tạo từ store
     setValue("taiKhoanNguoiTao", taiKhoanDangNhap);
   }, [courseDetail, setValue, taiKhoanDangNhap]);
 
   const { mutate: handleEditCourse, isPending } = useMutation({
     mutationFn: (payload: EditCourseForm) => {
-      // build đúng body mẫu
       const body = {
         maKhoaHoc: payload.maKhoaHoc,
         biDanh: payload.biDanh,
         tenKhoaHoc: payload.tenKhoaHoc,
-        moTa: payload.moTa ?? "", // body mẫu là string; nếu muốn null thì sửa BE
+        moTa: payload.moTa ?? "", 
         luotXem: Number(payload.luotXem) || 0,
         danhGia: Number(payload.danhGia) || 0,
         hinhAnh: payload.hinhAnh,
         maNhom: payload.maNhom || "GP01",
-        ngayTao: toDDMMYYYY(payload.ngayTao), // input date -> dd/MM/yyyy
+        ngayTao: toDDMMYYYY(payload.ngayTao), 
         maDanhMucKhoaHoc: payload.maDanhMucKhoaHoc,
         taiKhoanNguoiTao: payload.taiKhoanNguoiTao || taiKhoanDangNhap,
       };
@@ -163,7 +155,6 @@ export default function EditCourse({ maKhoaHoc, onSuccess, onCancel }: Props) {
     handleEditCourse(data, { onSettled: () => toast.dismiss(loadingId) });
   };
 
-  // (tuỳ chọn) nếu bạn sợ dialog trống, đừng return sớm; mình vẫn giữ để ngắn gọn:
   if (loadingDetail) return <div className="p-6 text-sm text-stone-600">Đang tải dữ liệu khóa học…</div>;
   if (loadDetailErr || !courseDetail) return <div className="p-6 text-sm text-red-600">Không tải được thông tin khóa học.</div>;
 
@@ -175,7 +166,6 @@ export default function EditCourse({ maKhoaHoc, onSuccess, onCancel }: Props) {
       <InputWithIcon id="tenKhoaHoc" label="Tên khóa học" icon={<FileText size={18} />} placeholder="VD: NodeJS Căn bản"
         {...register("tenKhoaHoc")} error={errors.tenKhoaHoc?.message} />
 
-      {/* Danh mục / Ngày tạo */}
       <div className="space-y-1">
         <Label htmlFor="maDanhMucKhoaHoc" className="text-lg">Danh mục khóa học</Label>
         <div className="flex items-center rounded-md border border-gray-300 bg-white overflow-hidden">
@@ -217,17 +207,15 @@ export default function EditCourse({ maKhoaHoc, onSuccess, onCancel }: Props) {
       <InputWithIcon id="danhGia" label="Đánh giá" type="number" icon={<Star size={18} />} placeholder="0"
         {...register("danhGia")} error={errors.danhGia?.message} />
 
-      {/* Tài khoản người tạo — hiển thị đẹp + input ẩn để qua schema */}
       <div className="md:col-span-2">
         <Label className="text-lg">Tài khoản người tạo</Label>
         <div className="mt-1 w-full rounded-md border border-gray-300 px-3 py-2 bg-gray-50 text-sm">
           {taiKhoanDangNhap || "(chưa đăng nhập)"}
         </div>
-        {/* input ẩn để satisfy schema & submit */}
+
         <input type="hidden" {...register("taiKhoanNguoiTao")} value={taiKhoanDangNhap} readOnly />
       </div>
 
-      {/* 1 ô hình ảnh (URL) */}
       <div className="md:col-span-2">
         <Label htmlFor="hinhAnh" className="text-lg">Hình ảnh</Label>
         <div className="flex gap-3 items-start mt-1">
@@ -242,7 +230,6 @@ export default function EditCourse({ maKhoaHoc, onSuccess, onCancel }: Props) {
         )}
       </div>
 
-      {/* Mô tả */}
       <div className="md:col-span-2">
         <Label className="text-lg">Mô tả khóa học</Label>
         <textarea
@@ -254,7 +241,6 @@ export default function EditCourse({ maKhoaHoc, onSuccess, onCancel }: Props) {
         {errors.moTa && <p className="text-sm text-red-600 mt-1">{errors.moTa.message}</p>}
       </div>
 
-      {/* Buttons */}
       <div className="md:col-span-2 flex flex-wrap items-center justify-end gap-2 text-lg">
         <Button type="submit" className="text-lg h-11 cursor-pointer" disabled={isSubmitting || isPending}>
           {isPending ? "Đang cập nhật..." : "Lưu thay đổi"}

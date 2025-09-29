@@ -1,22 +1,27 @@
 // UserManagement.tsx (CourseManagement) — FIXED PAGINATION
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
-  Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
 } from "@/components/ui/table";
 import {
-  Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger,
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
 } from "@/components/ui/dialog";
 import AddCourse from "./AddCourse/AddCourse";
-// import EditUser from "../UserMangement/EditUser/EditUser"; // ❌ không dùng nữa
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import PageSize from "../_Components/PageSize";
 import Pagination from "../_Components/Pagination";
-// import { deleteUserApi } from "@/services/user.api"; // ❌
 import type { pageResult } from "@/interfaces/pageResult.interface";
-import type { User } from "@/interfaces/user.interface";
 import { toast } from "sonner";
-// import RegisterCourse from "../UserMangement/RegisterCourse/RegisterCourse"; // ❌ ẩn ghi danh tạm thời
 import styles from "../UserMangement/UserManagement.module.css";
 import type { Course } from "@/interfaces/course.interface";
 import {
@@ -31,6 +36,8 @@ import {
   normalizeVN,
 } from "@/pages/AdminTemplate/_Components/useUniversalSearch";
 import EditCourse from "./EditCourse/EditCourse";
+import RegisterCourseForUser from "./RegisterCourseForUser/RegisterCoureForUser";
+
 
 export default function CourseManagement() {
   const [open, setOpen] = useState(false);
@@ -40,7 +47,10 @@ export default function CourseManagement() {
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [openEdit, setOpenEdit] = useState(false);
   const [editingCourse, setEditingCourse] = useState<string | null>(null);
-
+  const [openRegister, setOpenRegister] = useState(false);
+  const [selectedCourseId, setSelectedCourseId] = useState<string | undefined>(
+    undefined
+  );
 
   const currentUser = useAuthStore((s) => s.user);
   const taiKhoanDangNhap = currentUser?.taiKhoan ?? "";
@@ -55,7 +65,7 @@ export default function CourseManagement() {
     refetchOnWindowFocus: false,
   });
 
-  // Search ALL (khi có từ khóa)
+  // Search ALL
   const { isSearching, loadingSearch, errorSearch, results } =
     useUniversalSearch<Course>({
       keyword: searchTerm,
@@ -87,8 +97,7 @@ export default function CourseManagement() {
   const { mutate: deteleCourse } = useMutation({
     mutationFn: (maKhoaHoc: string) => deleteCourseApi(maKhoaHoc),
     onSuccess: () => {
-      toast.success("Đã xoá khóa học thành công!"); // ✅ sửa message
-      // invalidate để list cập nhật
+      toast.success("Đã xoá khóa học thành công!");
       queryClient.invalidateQueries({ queryKey: ["manager-course"] });
     },
     onError: (err: any) => {
@@ -102,6 +111,7 @@ export default function CourseManagement() {
     onSettled: () => setDeletingId(null),
   });
 
+  // Xóa khóa học
   const handleDeleteCourse = async (maKhoaHoc: string) => {
     const ok = window.confirm("Bạn có chắc muốn xóa khóa học này?");
     if (!ok) return;
@@ -115,19 +125,28 @@ export default function CourseManagement() {
     setOpenEdit(true);
   };
 
-  console.log("id", editingCourse);
-  
+  // Ghi danh khóa học cho user đang đăng nhập
+  const handleRegisterCourseForUser = (maKhoaHoc: string) => {
+    if (!taiKhoanDangNhap) {
+      toast.error("Bạn cần đăng nhập để ghi danh.");
+      return;
+    }
+    setSelectedCourseId(maKhoaHoc);
+    setOpenRegister(true); 
+  };
 
   return (
     <div className="space-y-5 text-left">
       <div className="flex flex-wrap items-center justify-between gap-4">
-        <h2 className="text-xl font-semibold text-gray-800">Quản lý khóa học</h2>
+        <h2 className="text-xl font-semibold text-gray-800">
+          Quản lý khóa học
+        </h2>
 
         <div className="flex items-center gap-3">
           {!isSearching && (
             <PageSize
               pageSize={pageSize}
-              setPageSize={(v) => {
+              setPageSize={(v: any) => {
                 setPageSize(v);
                 setPage(1);
               }}
@@ -135,14 +154,17 @@ export default function CourseManagement() {
           )}
 
           <SearchBar
-            placeholder="Tìm kiếm khóa học (mã, tên)"
+            placeholder="Tìm kiếm khóa học"
             onDebouncedChange={setSearchTerm}
           />
 
           {/* Thêm khóa học */}
           <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
-              <Button onClick={() => setOpen(true)} className="h-12 px-6 text-lg">
+              <Button
+                onClick={() => setOpen(true)}
+                className="h-12 px-6 text-lg"
+              >
                 Thêm khóa học
               </Button>
             </DialogTrigger>
@@ -154,7 +176,9 @@ export default function CourseManagement() {
                 taiKhoanNguoiTao={taiKhoanDangNhap}
                 onSuccess={() => {
                   setOpen(false);
-                  queryClient.invalidateQueries({ queryKey: ["manager-course"] }); // ✅ refetch
+                  queryClient.invalidateQueries({
+                    queryKey: ["manager-course"],
+                  });
                 }}
               />
             </DialogContent>
@@ -162,49 +186,69 @@ export default function CourseManagement() {
 
           {/* Sửa khóa học */}
           <Dialog open={openEdit} onOpenChange={setOpenEdit}>
-  <DialogContent className="sm:max-w-[860px]">  {/* ⬅️ rộng hơn để tránh cảm giác "trắng" */}
-    <DialogHeader>
-      <DialogTitle className="text-xl">Sửa khóa học</DialogTitle>
-    </DialogHeader>
-    {editingCourse && (
-      <EditCourse
-        maKhoaHoc={editingCourse}
-        onSuccess={() => {
-          setOpenEdit(false);
-          queryClient.invalidateQueries({ queryKey: ["manager-course"] }); // ⬅️ refresh list
-        }}
-        onCancel={() => setOpenEdit(false)}
-      />
-    )}
-  </DialogContent>
-</Dialog>
-
-          {/* Ghi danh: tạm ẩn để tránh lỗi handler chưa định nghĩa */}
-          {/*
-          <Dialog open={openRegister} onOpenChange={setOpenRegister}>
-            ...
+            <DialogContent className="sm:max-w-[860px]">
+              <DialogHeader>
+                <DialogTitle className="text-xl">Sửa khóa học</DialogTitle>
+              </DialogHeader>
+              {editingCourse && (
+                <EditCourse
+                  maKhoaHoc={editingCourse}
+                  onSuccess={() => {
+                    setOpenEdit(false);
+                    queryClient.invalidateQueries({
+                      queryKey: ["manager-course"],
+                    });
+                  }}
+                  onCancel={() => setOpenEdit(false)}
+                />
+              )}
+            </DialogContent>
           </Dialog>
-          */}
+
+          {/* Ghi danh khóa học cho user */}
+          <Dialog open={openRegister} onOpenChange={setOpenRegister}>
+            <DialogContent className="sm:max-w-[820px]">
+              <DialogHeader>
+                <DialogTitle className="text-xl">Ghi danh khoá học</DialogTitle>
+              </DialogHeader>
+
+              {taiKhoanDangNhap && selectedCourseId && (
+                <RegisterCourseForUser
+                  maKhoaHoc={selectedCourseId}
+                  onSuccess={() => setOpenRegister(false)}
+                  onCancel={() => setOpenRegister(false)}
+                />
+              )}
+            </DialogContent>
+          </Dialog>
         </div>
       </div>
-
-      {isSearching && (
-        <div className="text-sm text-gray-500">
-          Tìm thấy {paged.length} khóa học cho “{searchTerm}”
-        </div>
-      )}
 
       <div className="overflow-x-auto rounded-lg border border-gray-300 shadow-sm bg-white">
         <Table className="table-fixed w-full text-gray-700 text-lg border border-gray-300">
           <TableHeader className="bg-gray-50 text-gray-600">
             <TableRow className="divide-x divide-gray-300">
-              <TableHead className="px-4 py-3 w-[7%] text-center text-lg">STT</TableHead>
-              <TableHead className="px-4 py-3 w-[15%] text-center text-lg">Mã khóa học</TableHead>
-              <TableHead className="px-4 py-3 w-[18%] text-center text-lg">Tên khóa</TableHead>
-              <TableHead className="px-4 py-3 w-[14%] text-center text-lg">Hình ảnh</TableHead>
-              <TableHead className="px-4 py-3 w-[11%] text-center text-lg">Lượt xem</TableHead>
-              <TableHead className="px-4 py-3 w-[13%] text-center text-lg">Người tạo</TableHead>
-              <TableHead className="px-4 py-3 w-[22%] text-center text-lg">Hành động</TableHead>
+              <TableHead className="px-4 py-3 w-[7%] text-center text-lg">
+                STT
+              </TableHead>
+              <TableHead className="px-4 py-3 w-[15%] text-center text-lg">
+                Mã khóa học
+              </TableHead>
+              <TableHead className="px-4 py-3 w-[18%] text-center text-lg">
+                Tên khóa
+              </TableHead>
+              <TableHead className="px-4 py-3 w-[14%] text-center text-lg">
+                Hình ảnh
+              </TableHead>
+              <TableHead className="px-4 py-3 w-[11%] text-center text-lg">
+                Lượt xem
+              </TableHead>
+              <TableHead className="px-4 py-3 w-[13%] text-center text-lg">
+                Người tạo
+              </TableHead>
+              <TableHead className="px-4 py-3 w-[22%] text-center text-lg">
+                Hành động
+              </TableHead>
             </TableRow>
           </TableHeader>
 
@@ -225,55 +269,80 @@ export default function CourseManagement() {
               </TableRow>
             )}
 
-            {!loading && !hasError && paged.map((u, idx) => (
-              <TableRow key={`${u.maKhoaHoc}-${idx}`} className="divide-x divide-gray-300">
-                <TableCell className="px-4 py-3 text-center text-lg">{getStt(idx)}</TableCell>
-                <TableCell className="px-4 py-3 text-center text-lg break-words">{u.maKhoaHoc}</TableCell>
-                <TableCell className="px-4 py-3 text-center text-lg">{u.tenKhoaHoc}</TableCell>
-                <TableCell className="px-4 py-3 text-center text-lg">
-                  <div className="flex justify-center">
-                    <img
-                      src={u.hinhAnh}
-                      className="h-14 w-14 rounded-md border object-cover"
-                      loading="lazy"
-                      alt={u.tenKhoaHoc}
-                    />
-                  </div>
-                </TableCell>
-                <TableCell className="px-4 py-3 text-center text-lg break-words">{u.luotXem}</TableCell>
-                <TableCell className="px-4 py-3 text-center text-lg">{u?.nguoiTao?.hoTen ?? "-"}</TableCell>
-                <TableCell className="px-4 py-3 text-center text-lg">
-                  <div className="flex flex-wrap items-center justify-center gap-2 text-lg">
-                    {/* ❌ Ẩn tạm “Ghi danh” để tránh lỗi handler chưa định nghĩa
-                    <Button ... onClick={() => handleRegisterCourse(u.maKhoaHoc)}>Ghi Danh</Button>
-                    */}
-                    <Button
-                      size="lg"
-                      variant="outline"
-                      className={`${styles.iconAction} text-lg bg-yellow-400 text-black hover:bg-yellow-500 cursor-pointer`}
-                      onClick={() => handleEditCourse(u.maKhoaHoc)}
-                    >
-                      Sửa
-                    </Button>
+            {!loading &&
+              !hasError &&
+              paged.map((u, idx) => (
+                <TableRow
+                  key={`${u.maKhoaHoc}-${idx}`}
+                  className="divide-x divide-gray-300"
+                >
+                  <TableCell className="px-4 py-3 text-center text-lg">
+                    {getStt(idx)}
+                  </TableCell>
+                  <TableCell className="px-4 py-3 text-center text-lg break-words">
+                    {u.maKhoaHoc}
+                  </TableCell>
+                  <TableCell className="px-4 py-3 text-center text-lg">
+                    {u.tenKhoaHoc}
+                  </TableCell>
+                  <TableCell className="px-4 py-3 text-center text-lg">
+                    <div className="flex justify-center">
+                      <img
+                        src={u.hinhAnh}
+                        className="h-14 w-14 rounded-md border object-cover"
+                        loading="lazy"
+                        alt={u.tenKhoaHoc}
+                      />
+                    </div>
+                  </TableCell>
+                  <TableCell className="px-4 py-3 text-center text-lg break-words">
+                    {u.luotXem}
+                  </TableCell>
+                  <TableCell className="px-4 py-3 text-center text-lg">
+                    {u?.nguoiTao?.hoTen ?? "-"}
+                  </TableCell>
+                  <TableCell className="px-4 py-3 text-center text-lg">
+                    <div className="flex flex-wrap items-center justify-center gap-2 text-lg">
+                      <Button
+                        size="lg"
+                        variant="outline"
+                        className={`${styles.iconAction} text-lg bg-green-600 text-white hover:bg-green-700 hover:text-white cursor-pointer`}
+                        onClick={() => handleRegisterCourseForUser(u.maKhoaHoc)}
+                      >
+                        Ghi Danh
+                      </Button>
 
-                    <Button
-                      size="lg"
-                      variant="outline"
-                      className={`${styles.iconAction} text-lg bg-red-600 text-white hover:bg-red-700 hover:text-white cursor-pointer`}
-                      onClick={() => handleDeleteCourse(u.maKhoaHoc)}
-                    >
-                      {deletingId === u.maKhoaHoc ? "Đang xoá..." : "Xoá"}
-                    </Button>
-                  </div>
-                </TableCell>
-              </TableRow>
-            ))}
+                      <Button
+                        size="lg"
+                        variant="outline"
+                        className={`${styles.iconAction} text-lg bg-yellow-400 text-black hover:bg-yellow-500 cursor-pointer`}
+                        onClick={() => handleEditCourse(u.maKhoaHoc)}
+                      >
+                        Sửa
+                      </Button>
+
+                      <Button
+                        size="lg"
+                        variant="outline"
+                        className={`${styles.iconAction} text-lg bg-red-600 text-white hover:bg-red-700 hover:text-white cursor-pointer`}
+                        onClick={() => handleDeleteCourse(u.maKhoaHoc)}
+                      >
+                        {deletingId === u.maKhoaHoc ? "Đang xoá..." : "Xoá"}
+                      </Button>
+                    </div>
+                  </TableCell>
+                </TableRow>
+              ))}
           </TableBody>
         </Table>
       </div>
 
       {!isSearching && (
-        <Pagination currentPage={page} totalPages={totalPages} onPageChange={setPage} />
+        <Pagination
+          currentPage={page}
+          totalPages={totalPages}
+          onPageChange={setPage}
+        />
       )}
     </div>
   );

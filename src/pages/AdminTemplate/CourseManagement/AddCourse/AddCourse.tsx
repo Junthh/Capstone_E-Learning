@@ -33,7 +33,6 @@ const schema = z.object({
     (v) => (typeof v === "string" && v.trim() !== "" ? Number(v) : v),
     z.number().int().min(0, "Đánh giá phải ≥ 0").max(5, "Đánh giá tối đa 5")
   ),
-  // ⬇️ chỉ 1 ô hình ảnh (URL hoặc file name có đuôi)
   hinhAnh: z.string()
     .min(1, "Vui lòng nhập URL hoặc chọn file ảnh")
     .regex(imagePattern, "Hình ảnh không đúng định dạng (.png/.jpg/.jpeg/.webp/.gif)"),
@@ -51,7 +50,7 @@ type Props = {
   taiKhoanNguoiTao: string;
 };
 
-export default function AddCourse({ onSuccess, onCancel, taiKhoanNguoiTao }: Props) {
+export default function AddCourse({ onSuccess, onCancel }: Props) {
     const currentUser = useAuthStore((s) => s.user);
   const taiKhoanDangNhap = currentUser?.taiKhoan ?? "";
   console.log("taikhoan", taiKhoanDangNhap);
@@ -71,9 +70,9 @@ export default function AddCourse({ onSuccess, onCancel, taiKhoanNguoiTao }: Pro
       biDanh: "",
       tenKhoaHoc: "",
       moTa: "",
-      luotXem: 0 as unknown as any,
-      danhGia: 0 as unknown as any,
-      hinhAnh: "",                 // 1 ô duy nhất
+      luotXem: 0 as any,
+      danhGia: 0 as any,
+      hinhAnh: "",                
       maNhom: "GP01",
       ngayTao: "",
       maDanhMucKhoaHoc: "",
@@ -90,11 +89,9 @@ export default function AddCourse({ onSuccess, onCancel, taiKhoanNguoiTao }: Pro
   // Preview ảnh nếu người dùng chọn file
   const [localPreview, setLocalPreview] = useState<string>("");
 
-  /** Người dùng chọn file → chỉ preview + tự điền tên file vào ô hinhAnh */
   const handlePickFile = (file?: File | null) => {
     if (!file) return;
     setLocalPreview(URL.createObjectURL(file));
-    // điền tên file (đúng đuôi) vào trường hinhAnh để gửi lên BE
     setValue("hinhAnh", file.name, { shouldValidate: true });
   };
 
@@ -178,21 +175,16 @@ export default function AddCourse({ onSuccess, onCancel, taiKhoanNguoiTao }: Pro
       <InputWithIcon id="danhGia" label="Đánh giá (0-5)" type="number" icon={<Star size={18} />} placeholder="0"
         {...register("danhGia")} error={errors.danhGia?.message} />
 
-      {/* <InputWithIcon id="maNhom" label="Mã nhóm" icon={<List size={18} />} placeholder="GP01"
-        {...register("maNhom")} error={errors.maNhom?.message} /> */}
-
       <InputWithIcon id="taiKhoanNguoiTao" label="Tài khoản người tạo" icon={<UserIcon size={18} />}
         {...register("taiKhoanNguoiTao")} readOnly/>
 
-      {/* 🔵 1 ô hình ảnh duy nhất */}
       <div className="md:col-span-2">
         <Label htmlFor="hinhAnh" className="text-lg">Hình ảnh</Label>
         <div className="flex gap-3 items-start mt-1">
-          {/* Ô text để dán URL hoặc show tên file sau khi chọn */}
           <div className="flex-1">
             <InputWithIcon
               id="hinhAnh"
-              label="" // ẩn label phụ vì đã có Label bên ngoài
+              label="" 
               icon={<ImageIcon size={18} />}
               placeholder="Dán URL ảnh (http/https, .jpg/.png/...) hoặc bấm 'Chọn file'"
               {...register("hinhAnh")}
@@ -200,7 +192,6 @@ export default function AddCourse({ onSuccess, onCancel, taiKhoanNguoiTao }: Pro
             />
           </div>
 
-          {/* Nút chọn file + input file ẩn */}
           <div>
             <input
               id="hiddenFileInput"
@@ -215,7 +206,6 @@ export default function AddCourse({ onSuccess, onCancel, taiKhoanNguoiTao }: Pro
           </div>
         </div>
 
-        {/* Preview (nếu có) */}
         {(localPreview || imagePattern.test(watch("hinhAnh"))) && (
           <img
             src={localPreview || watch("hinhAnh")}
@@ -226,7 +216,6 @@ export default function AddCourse({ onSuccess, onCancel, taiKhoanNguoiTao }: Pro
         )}
       </div>
 
-      {/* Mô tả: full width */}
       <div className="md:col-span-2">
         <Label className="text-lg">Mô tả khóa học</Label>
         <textarea
@@ -238,7 +227,6 @@ export default function AddCourse({ onSuccess, onCancel, taiKhoanNguoiTao }: Pro
         {errors.moTa && <p className="text-sm text-red-600 mt-1">{errors.moTa.message}</p>}
       </div>
 
-      {/* Buttons */}
       <div className="md:col-span-2 flex flex-wrap items-center justify-end gap-2 text-lg">
         <Button type="submit" className="text-lg h-11 cursor-pointer" disabled={isSubmitting || isPending}>
           {isPending ? "Đang thêm..." : "Thêm khóa học"}

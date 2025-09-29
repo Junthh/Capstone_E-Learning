@@ -49,3 +49,10 @@ export interface EditUserInterface {
   maLoaiNguoiDung: string;
   maNhom: string;
 };
+
+
+export interface pendingUser {
+  taiKhoan: string;
+  hoTen: string;
+  biDanh: string;
+};
