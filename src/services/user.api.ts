@@ -1,5 +1,5 @@
 
-import type { UserInfo, UpdateUserRequest } from '@/interfaces/user.interface';
+import type { UserInfo, UpdateUserRequest, pendingUser } from '@/interfaces/user.interface';
 import api from './api';
 import type { pageResult } from "@/interfaces/pageResult.interface";
 import type { BaseApiResponse } from "@/interfaces/base.interface";
@@ -105,3 +105,47 @@ export const searchTaiKhoan = async (tuKhoa: string) => {
     throw error;
   }
 };
+
+
+export const getAllUserApiForCourse = async (): Promise<User[]> => {
+  try {
+    const response = await api.get<User[]>(
+    "/QuanLyNguoiDung/LayDanhSachNguoiDung?MaNhom=GP01"
+  );
+  return response.data;
+  } catch (error) {
+    console.error("Get course list failed:", error);
+    throw error;
+  }
+  
+};
+
+export const getPendingUserApi = async (
+  maKhoaHoc: string
+): Promise<pendingUser[]> => {
+  try {
+    const res = await api.post<pendingUser[]>(
+      "/QuanLyNguoiDung/LayDanhSachHocVienChoXetDuyet",
+      { maKhoaHoc }
+    );
+    return res.data;
+  } catch (error: any) {
+    console.error("Pending user failed:", error);
+    throw error;
+  }
+}
+
+export const getUserOfCourseApi = async (
+  maKhoaHoc: string
+): Promise<pendingUser[]> => {
+  try {
+    const res = await api.post<pendingUser[]>(
+      "/QuanLyNguoiDung/LayDanhSachHocVienKhoaHoc",
+      { maKhoaHoc }
+    );
+    return res.data;
+  } catch (error: any) {
+    console.error("Get user of course failed:", error);
+    throw error;
+  }
+}
