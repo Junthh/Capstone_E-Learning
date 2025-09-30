@@ -1,0 +1,279 @@
+.courseWrap {
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-x: contain;
+}
+
+.courseCard {
+  border: 1px solid #d1d5db;
+  border-radius: 0.5rem;
+  background: #fff;
+  box-shadow: 0 1px 2px rgb(0 0 0 / 0.05);
+  overflow: hidden;
+}
+
+.courseTable {
+  width: 100% !important;
+  border: 0 !important;
+  border-collapse: collapse !important;
+  table-layout: fixed !important;
+  border-spacing: 0 !important;
+}
+
+.courseTable :where(th, td) {
+  border-color: #d1d5db !important;
+}
+
+/* ================= iPhone 6/7/8 (≤ 413px) ================= */
+@media (max-width: 413px) {
+  .infor { font-size: 16px; }
+
+  .toolbar { flex-wrap: wrap; gap: 8px; }
+
+  .pageSizeBox {
+    font-size: 10.5px !important;
+    width: 170px; height: 50px;
+  }
+  .pageSizeBox label { font-size: 10.5px !important; }
+
+  .toolbar :where(button[role="combobox"], select) {
+    height: 30px !important;
+    width: 80px;
+    font-size: 10.5px !important;
+    padding: 0 10px !important;
+    line-height: 1.2 !important;
+  }
+
+  .searchBox { flex: 1 1 100%; max-width: 100% !important; }
+  .searchBox svg { width: 10px; }
+  .searchBox input {
+    height: 25px !important;
+    font-size: 10.5px !important;
+    padding-left: 32px !important;
+    padding-right: 10px !important;
+    line-height: 1.2 !important;
+    width: 200px;
+  }
+
+  .addBtn {
+    width: 20px !important;
+    height: 25px !important;
+    font-size: 10.5px !important;
+  }
+
+  .courseTable thead th {
+    font-size: 10.5px !important;
+    line-height: 1.15 !important;
+    padding: 2px 3px !important;
+    text-align: center !important;
+    font-weight: 600 !important;
+    white-space: normal !important;
+  }
+
+  .courseTable tbody td {
+    font-size: 12px !important;
+    line-height: 1.25 !important;
+    padding: 3px 4px !important;
+    white-space: normal !important;
+    word-break: break-word !important;
+  }
+
+  .courseTable th:nth-child(1),
+  .courseTable td:nth-child(1) { width: 8% !important; }
+  .courseTable th:nth-child(2),
+  .courseTable td:nth-child(2) { width: 14% !important; }
+  .courseTable th:nth-child(3),
+  .courseTable td:nth-child(3) { width: 13% !important; }
+  .courseTable th:nth-child(4),
+  .courseTable td:nth-child(4) { width: 19% !important; }
+  .courseTable th:nth-child(5),
+  .courseTable td:nth-child(5) { width: 24% !important; }
+  .courseTable th:nth-child(6),
+  .courseTable td:nth-child(6) { width: 12% !important; }
+  .courseTable th:nth-child(7),
+  .courseTable td:nth-child(7) { width: auto !important; }
+
+  .actions {
+    flex-direction: column !important;
+    gap: 6px !important;
+  }
+  .actions > * { width: 100% !important; }
+  .actions button { font-size: 11px !important; padding: 2px 4px !important; }
+}
+
+/* ===== iPhone 6/7/8 Plus (414–767.98px) ===== */
+@media (min-width: 414px) and (max-width: 767.98px) {
+  .toolbar { flex-wrap: wrap; gap: 8px; }
+
+  .pageSizeBox {
+    font-size: 11.5px !important;
+    width: 220px; height: 55px;
+  }
+  .pageSizeBox label { font-size: 11.5px !important; }
+
+  .toolbar :where(button[role="combobox"], select) {
+    height: 30px !important;
+    width: 80px;
+    font-size: 12.5px !important;
+    padding: 0 12px !important;
+  }
+
+  .searchBox { flex: 1 1 auto; max-width: 100% !important; }
+  .searchBox svg { width: 10px; }
+  .searchBox input {
+    height: 30px !important;
+    font-size: 13.5px !important;
+    padding-left: 34px !important;
+    padding-right: 12px !important;
+    width: 220px;
+  }
+
+  .addBtn {
+    width: 220px !important;
+    height: 30px !important;
+    font-size: 13.5px !important;
+  }
+
+  .courseTable thead th {
+    font-size: 11.5px !important;
+    padding: 3px 4px !important;
+    text-align: center !important;
+    white-space: normal !important;
+  }
+
+  .courseTable tbody td {
+    font-size: 12.5px !important;
+    padding: 4px 5px !important;
+    white-space: normal !important;
+    overflow-wrap: anywhere !important;
+  }
+
+  .actions {
+    flex-direction: column !important;
+    gap: 6px !important;
+  }
+  .actions > * { width: 100% !important; }
+  .actions button { font-size: 12px !important; padding: 3px 5px !important; }
+
+  /* width cột */
+  .compact th:nth-child(1), .compact td:nth-child(1) { width: 8% !important; }
+  .compact th:nth-child(2), .compact td:nth-child(2) { width: 16% !important; }
+  .compact th:nth-child(3), .compact td:nth-child(3) { width: 22% !important; }
+  .compact th:nth-child(4), .compact td:nth-child(4) { width: 14% !important; }
+  .compact th:nth-child(5), .compact td:nth-child(5) { width: 10% !important; }
+  .compact th:nth-child(6), .compact td:nth-child(6) { width: 14% !important; }
+  .compact th:nth-child(7), .compact td:nth-child(7) { width: auto !important; }
+}
+
+/* =================== iPad (768–1199.98px) =================== */
+@media (min-width: 768px) and (max-width: 1199.98px) {
+  .toolbar { display: flex; flex-wrap: nowrap; gap: 12px; align-items: center; }
+
+  .searchBox { flex: 1 1 auto !important; min-width: 200px; max-width: 360px; }
+
+  .addBtn { font-size: 14px; }
+
+  .courseTable thead th {
+    font-size: 13px !important;
+    line-height: 1.35 !important;
+    padding: 8px 10px !important;
+    white-space: normal !important;
+    text-align: center !important;
+    font-weight: 600 !important;
+  }
+
+  .courseTable tbody td {
+    font-size: 14px !important;
+    line-height: 1.45 !important;
+    padding: 10px 12px !important;
+    white-space: normal !important;
+    word-break: break-word !important;
+    text-align: left;
+    vertical-align: middle !important;
+  }
+
+  /* width cột */
+  .compact th:nth-child(1), .compact td:nth-child(1) { width: 7% !important; }
+  .compact th:nth-child(2), .compact td:nth-child(2) { width: 15% !important; }
+  .compact th:nth-child(3), .compact td:nth-child(3) { width: 20% !important; }
+  .compact th:nth-child(4), .compact td:nth-child(4) { width: 14% !important; }
+  .compact th:nth-child(5), .compact td:nth-child(5) { width: 10% !important; }
+  .compact th:nth-child(6), .compact td:nth-child(6) { width: 14% !important; }
+  .compact th:nth-child(7), .compact td:nth-child(7) { width: auto !important; }
+
+  .actions {
+    flex-direction: row !important;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .actions > * { width: auto; }
+  .actions button {
+    font-size: 14px !important;
+    padding: 6px 10px !important;
+    height: auto !important;
+    line-height: 1.3 !important;
+  }
+}
+
+/* =================== Mobile Common (≤767px) =================== */
+@media (max-width: 767.98px) {
+  .actions button {
+    padding: 4px !important;
+    height: 22px !important;
+    width: 22px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+
+  .actions svg {
+    width: 12px !important;
+    height: 12px !important;
+    display: block !important;
+  }
+}
+
+/* =================== Pagination =================== */
+.pagination { margin-top: 1rem; gap: 6px !important; }
+
+.pageBtn {
+  min-width: 34px; height: 34px;
+  padding: 0 10px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  background: #fff;
+  font-size: 14px;
+  color: #374151;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.pageBtn:hover:not(.disabled):not(.active) { background: #f3f4f6; }
+.pageBtn.disabled { opacity: 0.5; cursor: not-allowed; }
+
+.pageBtn.active {
+  background: linear-gradient(to bottom, #374151, #1f2937);
+  color: #fff; font-weight: 600;
+  border-color: #1f2937;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+}
+
+.dots {
+  padding: 0 8px;
+  font-size: 14px;
+  color: #6b7280;
+  user-select: none;
+}
+
+/* Pagination – iPhone 6/7/8 */
+@media (max-width: 413px) {
+  .pageBtn { min-width: 26px; height: 26px; font-size: 11px; border-radius: 6px; }
+  .dots { font-size: 11px; }
+
+  .imgCell { width: 150px; height: 50px; }
+}
+
+/* Pagination – iPhone Plus */
+@media (min-width: 414px) and (max-width: 767.98px) {
+  .pageBtn { min-width: 30px; height: 30px; font-size: 12px; border-radius: 6px; }
+  .dots { font-size: 12px; }
+}

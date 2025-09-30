@@ -1,20 +1,492 @@
+.tableWrap {
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-x: contain;
+}
 
-/* ===== iPhone 6/7/8 (≤ 413px) ===== */
+.tableCard {
+  border: 1px solid #d1d5db;
+  border-radius: 0.5rem;
+  background: #fff;
+  box-shadow: 0 1px 2px rgb(0 0 0 / 0.05);
+  overflow: hidden;
+}
+
+.table {
+  width: 100% !important;
+  border: 0 !important;
+  border-collapse: collapse !important;
+  table-layout: fixed !important;
+  border-spacing: 0 !important;
+}
+
+.table :where(th, td) {
+  border-color: #d1d5db !important;
+}
+
+/* ================= iPhone 6/7/8 (≤ 413px) ================= */
 @media (max-width: 413px) {
+  .infor {
+    font-size: 16px;
+  }
+  .toolbar {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
 
+  .pageSizeBox {
+    font-size: 10.5px !important;
+    width: 170px;
+    height: 50px;
+  }
+
+  .pageSizeBox label {
+    font-size: 10.5px !important;
+  }
+
+  /* PageSize nhỏ gọn */
+  .toolbar :where(button[role="combobox"], select) {
+    height: 30px !important;
+    width: 80px;
+    font-size: 10.5px !important;
+    padding: 0 10px !important;
+    line-height: 1.2 !important;
+  }
+
+  .searchBox svg {
+    width: 10px;
+  }
+
+  /* Search nhỏ gọn, full hàng */
+  .searchBox {
+    flex: 1 1 100%;
+    max-width: 100% !important;
+  }
+
+  .searchBox input {
+    height: 25px !important;
+    font-size: 10.5px !important;
+    padding-left: 32px !important;
+    /* chừa chỗ icon */
+    padding-right: 10px !important;
+    line-height: 1.2 !important;
+    width: 200px;
+  }
+
+  /* Nút Thêm người dùng full-width & thấp hơn */
+  .addBtn {
+    width: 200px !important;
+    height: 25px !important;
+    font-size: 10.5px !important;
+    padding: 0 12px !important;
+    line-height: 1.2 !important;
+  }
+
+  .table {
+    width: 100% !important;
+    min-width: auto !important;
+  }
+
+  /* Header nhỏ, cho phép xuống 2 dòng */
+  .compact thead th {
+    font-size: 10.5px !important;
+    line-height: 1.15 !important;
+    padding: 2px 3px !important;
+    white-space: normal !important;
+    word-break: keep-all !important;
+    text-align: center !important;
+    vertical-align: middle !important;
+    font-weight: 600 !important;
+  }
+
+  /* Body nhỏ, chữ dài xuống hàng */
+  .compact tbody td {
+    font-size: 12px !important;
+    line-height: 1.25 !important;
+    padding: 3px 4px !important;
+    white-space: normal !important;
+    overflow-wrap: anywhere !important;
+    word-break: break-word !important;
+    text-align: left !important;
+    vertical-align: middle !important;
+  }
+
+  /* CHIA % 6 cột đầu – cột 7 auto-fill để tràn sát viền */
+  .compact th:nth-child(1),
+  .compact td:nth-child(1) {
+    width: 8% !important;
+    text-align: center !important;
+  }
+
+  /* STT */
+  .compact th:nth-child(2),
+  .compact td:nth-child(2) {
+    width: 14% !important;
+    text-align: center !important;
+  }
+
+  /* TK */
+  .compact th:nth-child(3),
+  .compact td:nth-child(3) {
+    width: 13% !important;
+    text-align: center !important;
+  }
+
+  /* ND */
+  .compact th:nth-child(4),
+  .compact td:nth-child(4) {
+    width: 19% !important;
+  }
+
+  /* Họ tên */
+  .compact th:nth-child(5),
+  .compact td:nth-child(5) {
+    width: 24% !important;
+  }
+
+  /* Email */
+  .compact th:nth-child(6),
+  .compact td:nth-child(6) {
+    width: 12% !important;
+    text-align: center !important;
+  }
+
+  /* SĐT */
+  .compact th:nth-child(7),
+  .compact td:nth-child(7) {
+    width: auto !important;
+    text-align: center !important;
+  }
+
+  /* Hành động */
+
+  /* ép mép để nhìn “dính” viền card */
+  .compact thead th:first-child,
+  .compact tbody td:first-child {
+    padding-left: 2px !important;
+  }
+
+  .compact thead th:last-child,
+  .compact tbody td:last-child {
+    padding-right: 2px !important;
+  }
+
+  /* Nút hành động gọn */
+  .actions {
+    flex-direction: column !important;
+    gap: 6px !important;
+  }
+
+  .actions > * {
+    width: 100% !important;
+  }
+
+  .actions button {
+    font-size: 11px !important;
+    padding: 2px 4px !important;
+    height: auto !important;
+    line-height: 1.15 !important;
+  }
 }
 
-/* ===== iPhone Plus (414–767.98px) ===== */
+/* ===== iPhone 6/7/8 Plus (414–767.98px) ===== */
 @media (min-width: 414px) and (max-width: 767.98px) {
+  .toolbar {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
 
+  .searchBox svg {
+    width: 10px;
+  }
+
+
+  .pageSizeBox {
+    font-size: 11.5px !important;
+    width: 220px;
+    height: 55px;
+  }
+
+  .pageSizeBox label {
+    font-size: 11.5px !important;
+  }
+
+  /* PageSize nhỏ gọn hơn mặc định */
+  .toolbar :where(button[role="combobox"], select) {
+    height: 30px !important;
+    width: 80px;
+    font-size: 12.5px !important;
+    padding: 0 12px !important;
+    line-height: 1.2 !important;
+  }
+
+  /* Search thu nhỏ */
+  .searchBox {
+    flex: 1 1 auto;
+    max-width: 100% !important;
+  }
+
+  .searchBox input {
+    height: 30px !important;
+    font-size: 13.5px !important;
+    padding-left: 34px !important;
+    padding-right: 12px !important;
+    line-height: 1.2 !important;
+    width: 220px;
+  }
+
+  /* Nút Thêm người dùng gọn (~170–180px) */
+  .addBtn {
+    width: 220px !important;
+    height: 30px !important;
+    font-size: 13.5px !important;
+    padding: 0 14px !important;
+    line-height: 1.2 !important;
+  }
+
+  .table {
+    width: 100% !important;
+    min-width: auto !important;
+  }
+
+  .compact thead th {
+    font-size: 11.5px !important;
+    line-height: 1.2 !important;
+    padding: 3px 4px !important;
+    white-space: normal !important;
+    word-break: keep-all !important;
+    text-align: center !important;
+    vertical-align: middle !important;
+  }
+
+  .compact tbody td {
+    font-size: 12.5px !important;
+    line-height: 1.25 !important;
+    padding: 4px 5px !important;
+    white-space: normal !important;
+    overflow-wrap: anywhere !important;
+    word-break: break-word !important;
+    text-align: left !important;
+    vertical-align: middle !important;
+  }
+
+  .compact th:nth-child(1),
+  .compact td:nth-child(1) {
+    width: 8% !important;
+    text-align: center !important;
+  }
+
+  .compact th:nth-child(2),
+  .compact td:nth-child(2) {
+    width: 14% !important;
+    text-align: center !important;
+  }
+
+  .compact th:nth-child(3),
+  .compact td:nth-child(3) {
+    width: 13% !important;
+    text-align: center !important;
+  }
+
+  .compact th:nth-child(4),
+  .compact td:nth-child(4) {
+    width: 19% !important;
+  }
+
+  .compact th:nth-child(5),
+  .compact td:nth-child(5) {
+    width: 23% !important;
+  }
+
+  .compact th:nth-child(6),
+  .compact td:nth-child(6) {
+    width: 12% !important;
+    text-align: center !important;
+  }
+
+  .compact th:nth-child(7),
+  .compact td:nth-child(7) {
+    width: auto !important;
+    text-align: center !important;
+  }
+
+  /* auto-fill */
+
+  .compact thead th:first-child,
+  .compact tbody td:first-child {
+    padding-left: 2px !important;
+  }
+
+  .compact thead th:last-child,
+  .compact tbody td:last-child {
+    padding-right: 2px !important;
+  }
+
+  .actions {
+    flex-direction: column !important;
+    gap: 6px !important;
+  }
+
+  .actions > * {
+    width: 100% !important;
+  }
+
+  .actions button {
+    font-size: 12px !important;
+    padding: 3px 5px !important;
+    height: auto !important;
+    line-height: 1.2 !important;
+  }
 }
 
-/* ===== iPad (768–1199.98px) ===== */
+/* =================== iPad (768–1199.98px) =================== */
 @media (min-width: 768px) and (max-width: 1199.98px) {
+  .toolbar {
+    flex-wrap: nowrap;
+    gap: 12px;
+  }
 
+  .searchBox {
+    width: 250px !important;
+    max-width: 360px !important;
+  }
+
+  .addBtn {
+    font-size: 14px;
+  }
+
+  .table {
+    min-width: 100% !important;
+  }
+
+  .table thead th {
+    font-size: 13px !important;
+    line-height: 1.35 !important;
+    padding: 8px 10px !important;
+    white-space: nowrap !important;
+    word-break: keep-all !important;
+    text-align: center !important;
+    font-weight: 600 !important;
+  }
+
+  .table tbody td {
+    font-size: 14px !important;
+    line-height: 1.45 !important;
+    padding: 10px 12px !important;
+    white-space: normal !important;
+    overflow-wrap: anywhere !important;
+    word-break: break-word !important;
+    text-align: left;
+  }
+
+  .nowrap {
+    white-space: nowrap !important;
+    overflow: hidden;
+    text-overflow: clip;
+    text-align: center !important;
+  }
+
+  .actions {
+    flex-direction: row !important;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .actions > * {
+    width: auto;
+  }
+
+  .actions button {
+    font-size: 14px !important;
+    padding: 6px 10px !important;
+    height: auto !important;
+    line-height: 1.3 !important;
+  }
 }
 
-/* ===== Desktop ≥1200 ===== */
-@media (min-width: 1200px) {
+@media (max-width: 767.98px) {
+  .actions button {
+    padding: 4px !important;
+    height: 22px !important;
+    width: 22px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
 
+  .actions svg {
+    width: 12px !important;
+    height: 12px !important;
+    display: block !important;
+  }
+}
+
+
+/* Pagination chung */
+.pagination {
+  margin-top: 1rem;
+  gap: 6px !important;
+}
+
+.pageBtn {
+  min-width: 34px;
+  height: 34px;
+  padding: 0 10px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  background: #fff;
+  font-size: 14px;
+  color: #374151;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.pageBtn:hover:not(.disabled):not(.active) {
+  background: #f3f4f6;
+}
+
+.pageBtn.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.pageBtn.active {
+  background: linear-gradient(to bottom, #374151, #1f2937);
+  color: #fff;
+  font-weight: 600;
+  border-color: #1f2937;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+}
+
+/* Dấu ... */
+.dots {
+  padding: 0 8px;
+  font-size: 14px;
+  color: #6b7280;
+  user-select: none;
+}
+
+/* Mobile iPhone 6/7/8 */
+@media (max-width: 413px) {
+  .pageBtn {
+    min-width: 26px;
+    height: 26px;
+    font-size: 11px;
+    border-radius: 6px;
+  }
+  .dots {
+    font-size: 11px;
+  }
+}
+
+/* iPhone Plus */
+@media (min-width: 414px) and (max-width: 767.98px) {
+  .pageBtn {
+    min-width: 30px;
+    height: 30px;
+    font-size: 12px;
+    border-radius: 6px;
+  }
+  .dots {
+    font-size: 12px;
+  }
 }
