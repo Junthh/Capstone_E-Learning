@@ -1,0 +1,149 @@
+/* iPhone 6/7/8 */
+@media (max-width: 413px) {
+  .selectBox {
+    width: 150px !important;
+    height: 34px !important;
+    font-size: 10.5px !important;
+  }
+
+  .selectItem {
+    font-size: 10.5px !important;
+  }
+
+  .submitBtn {
+    font-size: 10.5px;
+    height: 34px !important;
+  }
+}
+
+/* iPhone Plus */
+@media (min-width: 414px) and (max-width: 767.98px) {
+  .selectBox {
+    width: 180px !important;
+    height: 36px !important;
+    font-size: 13.5px !important;
+  }
+
+  .selectItem {
+    font-size: 13px !important;
+  }
+
+  .submitBtn {
+    font-size: 13.5px;
+    height: 34px !important;
+  }
+}
+
+/* ===== iPhone 6/7/8 (≤ 413px) ===== */
+@media (max-width: 413px) {
+  /* Dialog + Table */
+  .dialogWrap {
+    font-size: 10.5px;
+  }
+  .sectionTitle {
+    font-size: 12px;
+  }
+
+  .rcfTable thead th,
+  .dialogWrap table thead th {
+    font-size: 11px !important;
+    line-height: 1.2 !important;
+    padding: 4px 6px !important;
+    text-align: center !important;
+  }
+  .rcfTable tbody td,
+  .dialogWrap table tbody td {
+    font-size: 12px !important;
+    line-height: 1.25 !important;
+    padding: 6px 8px !important;
+    text-align: left !important;
+    vertical-align: middle !important;
+  }
+
+  /* 🔧 FIX lệch cột – áp cho cả bảng chờ xác thực & đã ghi danh (4 cột) */
+  .rcfTable thead th:nth-child(1),
+  .rcfTable tbody td:nth-child(1),
+  .dialogWrap table thead th:nth-child(1),
+  .dialogWrap table tbody td:nth-child(1) {
+    width: 44px !important; /* STT */
+    text-align: center !important;
+  }
+  .rcfTable thead th:nth-child(4),
+  .rcfTable tbody td:nth-child(4),
+  .dialogWrap table thead th:nth-child(4),
+  .dialogWrap table tbody td:nth-child(4) {
+    width: 120px !important; /* Trạng thái / Chờ xác nhận */
+    text-align: center !important;
+  }
+
+  /* Nút hành động nhỏ, xếp dọc */
+  .actions {
+    flex-direction: column !important;
+    gap: 6px !important;
+  }
+  .actionBtn {
+    font-size: 11px !important;
+    padding: 4px 6px !important;
+    min-height: 26px !important;
+  }
+
+  .paginationWrap {
+    padding: 8px 0 !important;
+  }
+}
+
+/* ===== iPhone Plus (414–767.98px) ===== */
+@media (min-width: 414px) and (max-width: 767.98px) {
+  /* Dialog + Table */
+  .dialogWrap {
+    font-size: 13px;
+  }
+  .sectionTitle {
+    font-size: 14px;
+  }
+
+  .rcfTable thead th,
+  .dialogWrap table thead th {
+    font-size: 12px !important;
+    line-height: 1.25 !important;
+    padding: 6px 8px !important;
+    text-align: center !important;
+  }
+  .rcfTable tbody td,
+  .dialogWrap table tbody td {
+    font-size: 12.5px !important;
+    line-height: 1.3 !important;
+    padding: 8px 10px !important;
+    vertical-align: middle !important;
+  }
+
+  /* 🔧 FIX lệch cột (4 cột) */
+  .rcfTable thead th:nth-child(1),
+  .rcfTable tbody td:nth-child(1),
+  .dialogWrap table thead th:nth-child(1),
+  .dialogWrap table tbody td:nth-child(1) {
+    width: 52px !important; /* STT */
+    text-align: center !important;
+  }
+  .rcfTable thead th:nth-child(4),
+  .rcfTable tbody td:nth-child(4),
+  .dialogWrap table thead th:nth-child(4),
+  .dialogWrap table tbody td:nth-child(4) {
+    width: 140px !important; /* Trạng thái / Chờ xác nhận */
+    text-align: center !important;
+  }
+
+  .actions {
+    flex-direction: column !important;
+    gap: 6px !important;
+  }
+  .actionBtn {
+    font-size: 12px !important;
+    padding: 5px 8px !important;
+    min-height: 28px !important;
+  }
+
+  .paginationWrap {
+    padding: 10px 0 !important;
+  }
+}

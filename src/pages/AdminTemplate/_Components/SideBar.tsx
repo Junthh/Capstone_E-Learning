@@ -4,7 +4,7 @@ import { LayoutDashboard, Users, BookOpen, X } from "lucide-react";
 import styles from "./Sidebar.module.css";
 
 const navItems = [
-  { title: "Dashboard", href: "/admin", icon: LayoutDashboard },
+  // { title: "Dashboard", href: "/admin", icon: LayoutDashboard },
   { title: "Quản lý người dùng", href: "/admin/user-management", icon: Users },
   {
     title: "Quản lý khóa học",

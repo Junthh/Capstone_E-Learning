@@ -17,10 +17,7 @@ import {
 } from "@/components/ui/select";
 import Pagination from "../../_Components/Pagination";
 import { useQuery, useMutation } from "@tanstack/react-query";
-import {
-  registerSCourseApi,
-  unregisterCourseApi,
-} from "@/services/course.api";
+import { registerSCourseApi, unregisterCourseApi } from "@/services/course.api";
 import type {
   RegisterCourseRequest,
   UnregisterCourseRequest,
@@ -32,9 +29,10 @@ import {
   getUserOfCourseApi,
 } from "@/services/user.api";
 import type { pendingUser, User } from "@/interfaces/user.interface";
+import styles from "./RegisterCoureForUser.module.css";
 
 type Props = {
-  maKhoaHoc: string
+  maKhoaHoc: string;
   onSuccess?: () => void;
   onCancel?: () => void;
 };
@@ -44,7 +42,6 @@ export default function RegisterCourseForUser({ maKhoaHoc, onSuccess }: Props) {
   const [pending, _setPending] = useState<{ id: string; name: string }[]>([]);
 
   console.log("mkh", maKhoaHoc);
-  
 
   const {
     data: Users = [],
@@ -80,7 +77,6 @@ export default function RegisterCourseForUser({ maKhoaHoc, onSuccess }: Props) {
   });
 
   console.log("pending", pendingUser);
-  
 
   // Hủy đăng ký khóa học
   const { mutate: unregisterCourse, isPending: isUnregistering } = useMutation({
@@ -165,218 +161,197 @@ export default function RegisterCourseForUser({ maKhoaHoc, onSuccess }: Props) {
   };
 
   return (
-    <div className="space-y-4 text-lg">
-      {/* chọn tài khoản */}
-      <div className="flex items-center gap-2">
-        <Select
-          value={selected}
-          onValueChange={(v) => setSelected(v)}
-          disabled={loadingUsers || enrolling}
-        >
-          <SelectTrigger className="w-[260px] h-11 text-lg">
-            <SelectValue placeholder="Chọn tài khoản" />
-          </SelectTrigger>
+<div className={`space-y-4 text-lg ${styles.dialogWrap}`}>
+  {/* chọn tài khoản */}
+  <div className={`${styles.formRow} flex items-center gap-2`}>
+    <Select
+      value={selected}
+      onValueChange={(v) => setSelected(v)}
+      disabled={loadingUsers || enrolling}
+    >
+      <SelectTrigger className={`w-[260px] h-11 text-lg ${styles.selectBox}`}>
+        <SelectValue placeholder="Chọn tài khoản" />
+      </SelectTrigger>
+      <SelectContent>
+        {!loadingUsers &&
+          !errorUsers &&
+          Users.filter((u) => u?.taiKhoan?.trim()).map((u) => (
+            <SelectItem
+              key={u.taiKhoan}
+              value={u.taiKhoan}
+              className={`text-lg ${styles.selectItem}`}
+            >
+              {u.hoTen} ({u.taiKhoan})
+            </SelectItem>
+          ))}
+      </SelectContent>
+    </Select>
 
-          <SelectContent>
-            {loadingUsers && (
-              <SelectItem value="__loading" disabled>
-                Đang tải danh sách…
-              </SelectItem>
-            )}
+    <Button
+      onClick={handleEnrollForUser}
+      className={`h-11 px-5 bg-black text-white text-lg ${styles.submitBtn}`}
+      disabled={loadingUsers || !!errorUsers || enrolling}
+    >
+      {enrolling ? "Đang ghi danh..." : "Ghi danh"}
+    </Button>
+  </div>
 
-            {!loadingUsers && errorUsers && (
-              <SelectItem value="__error" disabled>
-                Lỗi tải tài khoản — bấm để thử lại
-              </SelectItem>
-            )}
+  {/* Học viên chờ xác thực */}
+  <div className={`border rounded-md ${styles.sectionCard}`}>
+    <div className={`border-b px-4 py-2 font-semibold ${styles.sectionTitle}`}>
+      Học viên chờ xác thực
+    </div>
 
-            {!loadingUsers && !errorUsers && Users.length === 0 && (
-              <SelectItem value="__empty" disabled>
-                Chưa có tài khoản
-              </SelectItem>
-            )}
+    <div className={styles.tableWrap}>
+      <Table className={`${styles.rcfTable} ${styles.compact}`}>
+        <TableHeader>
+          <TableRow>
+            <TableHead className={`text-center ${styles.colSTT}`}>STT</TableHead>
+            <TableHead className={styles.colAccount}>Tài khoản</TableHead>
+            <TableHead className={styles.colName}>Học viên</TableHead>
+            <TableHead className={`text-center ${styles.colStatus}`}>
+              Trạng thái
+            </TableHead>
+          </TableRow>
+        </TableHeader>
 
-            {!loadingUsers &&
-              !errorUsers &&
-              Users.filter((u) => u?.taiKhoan?.trim()).map((u) => (
-                <SelectItem
-                  key={u.taiKhoan}
-                  value={u.taiKhoan}
-                  className="text-lg"
-                >
-                  {u.hoTen} ({u.taiKhoan})
-                </SelectItem>
-              ))}
-          </SelectContent>
-        </Select>
-
-        <Button
-          onClick={handleEnrollForUser}
-          className="h-11 px-5 bg-black text-white text-lg"
-          disabled={loadingUsers || !!errorUsers || enrolling }
-        >
-          {enrolling ? "Đang ghi danh..." : "Ghi danh"}
-        </Button>
-      </div>
-
-      {/* Học viên chờ xác thực */}
-      <div className="border rounded-md">
-        <div className="border-b px-4 py-2 font-semibold">
-          Học viên chờ xác thực
-        </div>
-        <Table>
-          <TableHeader>
+        <TableBody>
+          {loadingPending ? (
             <TableRow>
-              <TableHead className="w-[60px] text-center">STT</TableHead>
-              <TableHead>Tài khoản</TableHead>
-              <TableHead>Học viên</TableHead>
-              <TableHead className="w-[160px] text-center">
-                Trạng thái
-              </TableHead>
+              <TableCell colSpan={4} className="text-center py-4">
+                Đang tải…
+              </TableCell>
             </TableRow>
-          </TableHeader>
-          <TableBody>
-            {loadingPending ? (
-              <TableRow>
-                <TableCell colSpan={3} className="text-center py-4">
-                  Đang tải…
-                </TableCell>
-              </TableRow>
-            ) : errorPending ? (
-              <TableRow>
-                <TableCell colSpan={3} className="text-center py-4">
-                  Lỗi tải danh sách.{" "}
-                  <button
-                    className="underline"
-                    onClick={() => void refetchPending()}
-                  >
-                    Thử lại
-                  </button>
-                </TableCell>
-              </TableRow>
-            ) : (pagedPending ?? []).length === 0 ? (
-              <TableRow>
-                <TableCell colSpan={3} className="text-center py-4">
-                  —
-                </TableCell>
-              </TableRow>
-            ) : (
-              (pagedPending ?? []).map((c, i) => (
-                <TableRow key={c.id}>
-                  <TableCell className="text-center">
-                    {(pagePending - 1) * pageSize + i + 1}
-                  </TableCell>
-                  <TableCell className="break-words">{c.name}</TableCell>
-                  <TableCell className="break-words">{c.name}</TableCell>
-                  <TableCell className="text-center text-gray-600">
-                    <div className="flex items-center justify-center gap-2 text-lg">
-                      <Button
-                        onClick={() => handleConfirmCourse(c.id)}
-                        variant="destructive"
-                        size="sm"
-                        className="text-lg px-4 py-2 bg-green-600 text-white hover:bg-green-700 hover:text-white cursor-pointer"
-                        // disabled={loadingCourses || errorCourses || enrolling}
-                      >
-                        {enrolling ? "Đang xác thực..." : "Xác thực"}
-                      </Button>
-                      <Button
-                        variant="destructive"
-                        size="sm"
-                        className="text-lg px-4 py-2 cursor-pointer"
-                        disabled={isUnregistering}
-                        onClick={() => handleUnenroll(c.id)}
-                      >
-                        {isUnregistering ? "Đang xóa…" : "Xóa"}
-                      </Button>
-                    </div>
-                  </TableCell>
-                </TableRow>
-              ))
-            )}
-          </TableBody>
-        </Table>
-
-        {/* Pagination riêng cho pending */}
-      </div>
-      <div className="p-3">
-        <Pagination
-          currentPage={pagePending}
-          totalPages={totalPagesPending}
-          onPageChange={setPagePending}
-        />
-      </div>
-
-      {/* Khóa học đã ghi danh */}
-      <div className="border rounded-md">
-        <div className="border-b px-4 py-2 font-semibold">
-          Tài khoản đã ghi danh
-        </div>
-        <Table>
-          <TableHeader>
+          ) : errorPending ? (
             <TableRow>
-              <TableHead className="w-[60px] text-center">STT</TableHead>
-              <TableHead>Tài khoản</TableHead>
-              <TableHead>Học viên </TableHead>
-              <TableHead className="w-[160px] text-center">
-                Chờ xác nhận
-              </TableHead>
+              <TableCell colSpan={4} className="text-center py-4">
+                Lỗi tải danh sách.{" "}
+                <button className="underline" onClick={() => void refetchPending()}>
+                  Thử lại
+                </button>
+              </TableCell>
             </TableRow>
-          </TableHeader>
-          <TableBody>
-            {loadingUser ? (
-              <TableRow>
-                <TableCell colSpan={3} className="text-center py-4">
-                  Đang tải…
+          ) : (pagedPending ?? []).length === 0 ? (
+            <TableRow>
+              <TableCell colSpan={4} className="text-center py-4">
+                —
+              </TableCell>
+            </TableRow>
+          ) : (
+            (pagedPending ?? []).map((c, i) => (
+              <TableRow key={c.id}>
+                <TableCell className="text-center">
+                  {(pagePending - 1) * pageSize + i + 1}
                 </TableCell>
-              </TableRow>
-            ) : errorUser ? (
-              <TableRow>
-                <TableCell colSpan={3} className="text-center py-4">
-                  Lỗi tải danh sách.{" "}
-                  <button
-                    className="underline"
-                    onClick={() => void refetchEnrolled()}
-                  >
-                    Thử lại
-                  </button>
-                </TableCell>
-              </TableRow>
-            ) : (pagedEnrolled ?? []).length === 0 ? (
-              <TableRow>
-                <TableCell colSpan={3} className="text-center py-4">
-                  —
-                </TableCell>
-              </TableRow>
-            ) : (
-              (pagedEnrolled ?? []).map((u, i) => (
-                <TableRow key={u.id}>
-                  <TableCell className="text-center">
-                    {(page - 1) * pageSize + i + 1}
-                  </TableCell>
-                  <TableCell>{u.id}</TableCell>
-                  <TableCell>{u.name}</TableCell>
-                  <TableCell className="text-center">
+                <TableCell className={styles.breakWord}>{c.name}</TableCell>
+                <TableCell className={styles.breakWord}>{c.name}</TableCell>
+                <TableCell className="text-center text-gray-600">
+                  <div className={`flex items-center justify-center gap-2 ${styles.actions}`}>
+                    <Button
+                      onClick={() => handleConfirmCourse(c.id)}
+                      variant="destructive"
+                      size="sm"
+                      className={`text-lg px-4 py-2 bg-green-600 text-white hover:bg-green-700 hover:text-white cursor-pointer ${styles.actionBtn}`}
+                    >
+                      {enrolling ? "Đang xác thực..." : "Xác thực"}
+                    </Button>
                     <Button
                       variant="destructive"
                       size="sm"
-                      className="text-lg px-4 py-2 cursor-pointer"
+                      className={`text-lg px-4 py-2 cursor-pointer ${styles.actionBtn}`}
                       disabled={isUnregistering}
-                      onClick={() => handleUnenroll(u.id)} // ✅ truyền đúng id
+                      onClick={() => handleUnenroll(c.id)}
                     >
                       {isUnregistering ? "Đang xóa…" : "Xóa"}
                     </Button>
-                  </TableCell>
-                </TableRow>
-              ))
-            )}
-          </TableBody>
-        </Table>
-      </div>
-      <Pagination
-        currentPage={page}
-        totalPages={totalPages}
-        onPageChange={setPage}
-      />
+                  </div>
+                </TableCell>
+              </TableRow>
+            ))
+          )}
+        </TableBody>
+      </Table>
     </div>
+  </div>
+
+  <div className={`p-3 ${styles.paginationWrap}`}>
+    <Pagination
+      currentPage={pagePending}
+      totalPages={totalPagesPending}
+      onPageChange={setPagePending}
+    />
+  </div>
+
+  {/* Học viên đã ghi danh */}
+  <div className={`border rounded-md ${styles.sectionCard}`}>
+    <div className={`border-b px-4 py-2 font-semibold ${styles.sectionTitle}`}>
+      Học viên đã ghi danh
+    </div>
+
+    <div className={styles.tableWrap}>
+      <Table className={`${styles.rcfTable} ${styles.compact}`}>
+        <TableHeader>
+          <TableRow>
+            <TableHead className={`text-center ${styles.colSTT}`}>STT</TableHead>
+            <TableHead className={styles.colAccount}>Tài khoản</TableHead>
+            <TableHead className={styles.colName}>Học viên</TableHead>
+            <TableHead className={`text-center ${styles.colStatus}`}>
+              Chờ xác nhận
+            </TableHead>
+          </TableRow>
+        </TableHeader>
+
+        <TableBody>
+          {loadingUser ? (
+            <TableRow>
+              <TableCell colSpan={4} className="text-center py-4">
+                Đang tải…
+              </TableCell>
+            </TableRow>
+          ) : errorUser ? (
+            <TableRow>
+              <TableCell colSpan={4} className="text-center py-4">
+                Lỗi tải danh sách.{" "}
+                <button className="underline" onClick={() => void refetchEnrolled()}>
+                  Thử lại
+                </button>
+              </TableCell>
+            </TableRow>
+          ) : (pagedEnrolled ?? []).length === 0 ? (
+            <TableRow>
+              <TableCell colSpan={4} className="text-center py-4">
+                —
+              </TableCell>
+            </TableRow>
+          ) : (
+            (pagedEnrolled ?? []).map((u, i) => (
+              <TableRow key={u.id}>
+                <TableCell className="text-center">
+                  {(page - 1) * pageSize + i + 1}
+                </TableCell>
+                <TableCell className={styles.breakWord}>{u.id}</TableCell>
+                <TableCell className={styles.breakWord}>{u.name}</TableCell>
+                <TableCell className="text-center">
+                  <Button
+                    variant="destructive"
+                    size="sm"
+                    className={`text-lg px-4 py-2 cursor-pointer ${styles.actionBtn}`}
+                    disabled={isUnregistering}
+                    onClick={() => handleUnenroll(u.id)}
+                  >
+                    {isUnregistering ? "Đang xóa…" : "Xóa"}
+                  </Button>
+                </TableCell>
+              </TableRow>
+            ))
+          )}
+        </TableBody>
+      </Table>
+    </div>
+  </div>
+
+  <Pagination currentPage={page} totalPages={totalPages} onPageChange={setPage} />
+</div>
+
   );
 }
