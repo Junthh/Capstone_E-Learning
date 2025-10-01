@@ -27,7 +27,8 @@ import type { pageResult } from "@/interfaces/pageResult.interface";
 import type { User } from "@/interfaces/user.interface";
 import { toast } from "sonner";
 import RegisterCourse from "./RegisterCourse/RegisterCourse";
-import styles from "./UserManagement.module.css"
+import styles from "./UserManagement.module.css";
+import { UserPlus, Pencil, Trash2 } from "lucide-react";
 
 const normalizeVN = (s: string) =>
   (s || "")
@@ -162,24 +163,27 @@ export default function UserManagement() {
     : isLoading;
 
   return (
-    <div className="space-y-5 text-left">
-      <div className="flex flex-wrap items-center justify-between gap-4">
-        <h2 className="text-xl font-semibold text-gray-800">
+    <div className={`${styles.wrap} space-y-5 text-left`}>
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        <h2 className={`${styles.infor} text-xl font-semibold text-gray-800`}>
           Quản lý người dùng
         </h2>
 
-        <div className="flex items-center gap-3">
+        <div className={`${styles.toolbar} flex items-center gap-3`}>
           {!isSearching && (
-            <PageSize
-              pageSize={pageSize}
-              setPageSize={(v: number) => {
-                setPageSize(v);
-                setPage(1);
-              }}
-            />
+            <div className={styles.pageSizeBox}>
+              <PageSize
+                pageSize={pageSize}
+                setPageSize={(v: number) => {
+                  setPageSize(v);
+                  setPage(1);
+                }}
+              />
+            </div>
           )}
 
-          <div className="relative w-96">
+          {/* search: thêm styles.searchBox */}
+          <div className={`${styles.searchBox} relative w-96`}>
             <Input
               type="text"
               value={tuKhoa}
@@ -207,7 +211,7 @@ export default function UserManagement() {
             <DialogTrigger asChild>
               <Button
                 onClick={() => setOpen(true)}
-                className="h-12 px-6 text-lg"
+                className={`${styles.addBtn} h-12 px-6 text-lg cursor-pointer`}
               >
                 Thêm người dùng
               </Button>
@@ -220,7 +224,6 @@ export default function UserManagement() {
             </DialogContent>
           </Dialog>
 
-          {/* Dialog editUser */}
           <Dialog open={openEdit} onOpenChange={setOpenEdit}>
             <DialogContent className="sm:max-w-[640px]">
               <DialogHeader>
@@ -236,7 +239,6 @@ export default function UserManagement() {
             </DialogContent>
           </Dialog>
 
-          {/* Dialog registerCourse */}
           <Dialog open={openRegister} onOpenChange={setOpenRegister}>
             <DialogContent className="sm:max-w-[820px]">
               <DialogHeader>
@@ -254,8 +256,11 @@ export default function UserManagement() {
         </div>
       </div>
 
-      <div className="overflow-x-auto rounded-lg border border-gray-300 shadow-sm bg-white">
-        <Table className="table-fixed w-full text-gray-700 text-lg border border-gray-300">
+      {/* bảng: thêm styles.tableWrap + styles.table */}
+      <div className={`${styles.tableCard} ${styles.tableWrap}`}>
+        <Table
+          className={`${styles.table} ${styles.compact} table-fixed w-full text-gray-700 text-lg`}
+        >
           <TableHeader className="bg-gray-50 text-gray-600">
             <TableRow className="divide-x divide-gray-300">
               <TableHead className="px-4 py-3 w-[7%] text-center text-lg">
@@ -306,51 +311,69 @@ export default function UserManagement() {
                   key={`${u.taiKhoan}-${idx}`}
                   className="divide-x divide-gray-300"
                 >
-                  <TableCell className="px-4 py-3 text-center text-lg">
+                  <TableCell
+                    className={`px-4 py-3 text-center text-lg ${styles.nowrap}`}
+                  >
                     {getStt(idx)}
                   </TableCell>
-                  <TableCell className="px-4 py-3 text-center text-lg break-words">
+                  <TableCell
+                    className={`px-4 py-3 text-center text-lg ${styles.nowrap}`}
+                  >
                     {(u.taiKhoan ?? "").trim()}
                   </TableCell>
-                  <TableCell className="px-4 py-3 text-center text-lg">
+                  <TableCell
+                    className={`px-4 py-3 text-center text-lg ${styles.nowrap}`}
+                  >
                     {u.tenLoaiNguoiDung}
                   </TableCell>
-                  <TableCell className="px-4 py-3 text-center text-lg break-words">
+                  <TableCell className="px-4 py-3 text-left text-lg whitespace-normal break-words">
                     {u.hoTen}
                   </TableCell>
-                  <TableCell className="px-4 py-3 text-center text-lg break-words">
+                  <TableCell className="px-4 py-3 text-left text-lg whitespace-normal break-words">
                     {u.email}
                   </TableCell>
-                  <TableCell className="px-4 py-3 text-center text-lg">
+                  <TableCell
+                    className={`px-4 py-3 text-center text-lg ${styles.nowrap}`}
+                  >
                     {(u as any).soDt ?? (u as any).soDT ?? "-"}
                   </TableCell>
-                  <TableCell className="px-4 py-3 text-center text-lg">
-                    <div className="flex flex-wrap items-center justify-center gap-2 text-lg">
+                  <TableCell className={`px-4 py-3 text-center text-lg`}>
+                    <div
+                      className={`${styles.actions} flex flex-wrap items-center justify-center gap-2 text-lg`}
+                    >
+                      {/* Ghi danh */}
                       <Button
                         size="lg"
                         variant="outline"
                         className={`${styles.iconAction} text-lg bg-green-600 text-white hover:bg-green-700 hover:text-white cursor-pointer`}
                         onClick={() => handleRegisterCourse(u.taiKhoan)}
                       >
-                        Ghi Danh
+                        <span className="hidden sm:inline">Ghi Danh</span>
+                        <UserPlus className="block sm:hidden w-4 h-4" />{" "}
+                        {/* 👈 hiện icon khi mobile */}
                       </Button>
 
+                      {/* Sửa */}
                       <Button
                         size="lg"
                         variant="outline"
                         className={`${styles.iconAction} text-lg bg-yellow-400 text-black hover:bg-yellow-500 cursor-pointer`}
                         onClick={() => handleEditUser(u.taiKhoan)}
                       >
-                        Sửa
+                        <span className="hidden sm:inline">Sửa</span>
+                        <Pencil className="block sm:hidden w-4 h-4" />
                       </Button>
-
+                      {/* Xoá */}
                       <Button
                         size="lg"
                         variant="outline"
                         className={`${styles.iconAction} text-lg bg-red-600 text-white hover:bg-red-700 hover:text-white cursor-pointer`}
                         onClick={() => handleDeleteUser(u.taiKhoan)}
                       >
-                        {deletingId === u.taiKhoan ? "Đang xoá..." : "Xoá"}
+                        <span className="hidden sm:inline">
+                          {deletingId === u.taiKhoan ? "Đang xoá..." : "Xoá"}
+                        </span>
+                        <Trash2 className="block sm:hidden w-4 h-4" />
                       </Button>
                     </div>
                   </TableCell>

@@ -22,7 +22,6 @@ import PageSize from "../_Components/PageSize";
 import Pagination from "../_Components/Pagination";
 import type { pageResult } from "@/interfaces/pageResult.interface";
 import { toast } from "sonner";
-import styles from "../UserMangement/UserManagement.module.css";
 import type { Course } from "@/interfaces/course.interface";
 import {
   deleteCourseApi,
@@ -37,7 +36,8 @@ import {
 } from "@/pages/AdminTemplate/_Components/useUniversalSearch";
 import EditCourse from "./EditCourse/EditCourse";
 import RegisterCourseForUser from "./RegisterCourseForUser/RegisterCoureForUser";
-
+import styles from "../CourseManagement/CourseManagement.module.css";
+import { UserPlus, Pencil, Trash2 } from "lucide-react";
 
 export default function CourseManagement() {
   const [open, setOpen] = useState(false);
@@ -132,38 +132,42 @@ export default function CourseManagement() {
       return;
     }
     setSelectedCourseId(maKhoaHoc);
-    setOpenRegister(true); 
+    setOpenRegister(true);
   };
 
   return (
-    <div className="space-y-5 text-left">
+    <div className={`${styles.courseWrap} space-y-5 text-left`}>
       <div className="flex flex-wrap items-center justify-between gap-4">
-        <h2 className="text-xl font-semibold text-gray-800">
+        <h2 className={`${styles.infor} text-xl font-semibold text-gray-800`}>
           Quản lý khóa học
         </h2>
 
-        <div className="flex items-center gap-3">
+        <div className={`${styles.toolbar} flex items-center gap-3`}>
           {!isSearching && (
-            <PageSize
-              pageSize={pageSize}
-              setPageSize={(v: any) => {
-                setPageSize(v);
-                setPage(1);
-              }}
-            />
+            <div className={styles.pageSizeBox}>
+              <PageSize
+                pageSize={pageSize}
+                setPageSize={(v: any) => {
+                  setPageSize(v);
+                  setPage(1);
+                }}
+              />
+            </div>
           )}
 
-          <SearchBar
-            placeholder="Tìm kiếm khóa học"
-            onDebouncedChange={setSearchTerm}
-          />
+          <div className={styles.searchBox}>
+            <SearchBar
+              placeholder="Tìm kiếm khóa học"
+              onDebouncedChange={setSearchTerm}
+            />
+          </div>
 
           {/* Thêm khóa học */}
           <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
               <Button
                 onClick={() => setOpen(true)}
-                className="h-12 px-6 text-lg"
+                className={`${styles.addBtn} h-12 px-6 text-lg cursor-pointer`}
               >
                 Thêm khóa học
               </Button>
@@ -224,8 +228,10 @@ export default function CourseManagement() {
         </div>
       </div>
 
-      <div className="overflow-x-auto rounded-lg border border-gray-300 shadow-sm bg-white">
-        <Table className="table-fixed w-full text-gray-700 text-lg border border-gray-300">
+      <div className={`${styles.courseCard} ${styles.courseWrap}`}>
+        <Table
+          className={`${styles.courseTable} ${styles.compact} table-fixed w-full text-gray-700 text-lg`}
+        >
           <TableHeader className="bg-gray-50 text-gray-600">
             <TableRow className="divide-x divide-gray-300">
               <TableHead className="px-4 py-3 w-[7%] text-center text-lg">
@@ -276,7 +282,7 @@ export default function CourseManagement() {
                   key={`${u.maKhoaHoc}-${idx}`}
                   className="divide-x divide-gray-300"
                 >
-                  <TableCell className="px-4 py-3 text-center text-lg">
+                  <TableCell className={`px-4 py-3 text-center text-lg`}>
                     {getStt(idx)}
                   </TableCell>
                   <TableCell className="px-4 py-3 text-center text-lg break-words">
@@ -289,7 +295,7 @@ export default function CourseManagement() {
                     <div className="flex justify-center">
                       <img
                         src={u.hinhAnh}
-                        className="h-14 w-14 rounded-md border object-cover"
+                        className={`${styles.imgCell} h-14 w-14 rounded-md border object-cover`}
                         loading="lazy"
                         alt={u.tenKhoaHoc}
                       />
@@ -302,14 +308,17 @@ export default function CourseManagement() {
                     {u?.nguoiTao?.hoTen ?? "-"}
                   </TableCell>
                   <TableCell className="px-4 py-3 text-center text-lg">
-                    <div className="flex flex-wrap items-center justify-center gap-2 text-lg">
+                    <div
+                      className={`${styles.actions} flex flex-wrap items-center justify-center gap-2 text-lg`}
+                    >
                       <Button
                         size="lg"
                         variant="outline"
                         className={`${styles.iconAction} text-lg bg-green-600 text-white hover:bg-green-700 hover:text-white cursor-pointer`}
                         onClick={() => handleRegisterCourseForUser(u.maKhoaHoc)}
                       >
-                        Ghi Danh
+                        <span className="hidden sm:inline">Ghi Danh</span>
+                        <UserPlus className="block sm:hidden w-4 h-4" />
                       </Button>
 
                       <Button
@@ -318,7 +327,8 @@ export default function CourseManagement() {
                         className={`${styles.iconAction} text-lg bg-yellow-400 text-black hover:bg-yellow-500 cursor-pointer`}
                         onClick={() => handleEditCourse(u.maKhoaHoc)}
                       >
-                        Sửa
+                        <span className="hidden sm:inline">Sửa</span>
+                        <Pencil className="block sm:hidden w-4 h-4" />
                       </Button>
 
                       <Button
@@ -327,7 +337,10 @@ export default function CourseManagement() {
                         className={`${styles.iconAction} text-lg bg-red-600 text-white hover:bg-red-700 hover:text-white cursor-pointer`}
                         onClick={() => handleDeleteCourse(u.maKhoaHoc)}
                       >
-                        {deletingId === u.maKhoaHoc ? "Đang xoá..." : "Xoá"}
+                        <span className="hidden sm:inline">
+                          {deletingId === u.maKhoaHoc ? "Đang xoá..." : "Xoá"}
+                        </span>
+                        <Trash2 className="block sm:hidden w-4 h-4" />
                       </Button>
                     </div>
                   </TableCell>

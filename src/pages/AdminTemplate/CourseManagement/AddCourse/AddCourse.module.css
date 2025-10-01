@@ -1,0 +1,303 @@
+/* 2-cột và full-width helper */
+.twoCols { display: grid; }
+.span2 { grid-column: 1 / -1; }
+
+/* iPhone 6/7/8 (<= 413px) */
+@media (max-width: 413px) {
+  .form{
+    --fs: 11px;        /* font input/select */
+    --fs-label: 13px;  /* font label */
+    --h: 28px;         /* ↓ input/select/nút ngắn hơn */
+    --px: 8px;
+    --gap: 8px;
+    --radius: 6px;
+    --border: 1px solid #D1D5DB;
+  }
+
+  /* 2 cột ở màn nhỏ */
+  .twoCols{
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    column-gap: var(--gap) !important;
+    row-gap: var(--gap) !important;
+  }
+  .span2{ grid-column: 1 / -1 !important; }
+
+  /* đồng bộ label */
+  .form :where(label,[class*="label"],[class*="Label"],[class*="LabelRoot"]){
+    font-size: var(--fs-label) !important;
+    line-height: 1.15 !important;
+    margin-bottom: 4px !important;
+  }
+
+  /* input/select/textarea/ngắn gọn */
+  .form :where(input){
+    height: var(--h) !important;
+    font-size: var(--fs) !important;
+    padding: 0 var(--px) !important;
+    border-radius: var(--radius) !important;
+    line-height: 1.2 !important;
+  }
+  .textarea{
+    font-size: var(--fs) !important;
+    min-height: 90px;
+    border-radius: var(--radius) !important;
+  }
+
+  /* select khớp chiều cao input */
+  .selectOuter{
+    display: flex !important;
+    align-items: center !important;
+    height: var(--h) !important;
+    border: var(--border) !important;
+    border-radius: var(--radius) !important;
+    background: #fff !important;
+    overflow: hidden;
+  }
+  .leading{
+    height: 100% !important;
+    display: flex !important;
+    align-items: center !important;
+    padding: 0 8px !important;
+    border-right: var(--border) !important;
+    background: #F9FAFB !important;
+  }
+  .leading :where(svg){ width: 14px !important; height: 14px !important; }
+  .selectTrigger{
+    height: 100% !important;
+    border: 0 !important;
+    font-size: var(--fs) !important;
+    padding: 0 var(--px) !important;
+    box-shadow: none !important;
+  }
+
+  .btn{
+    height: var(--h) !important;
+    font-size: var(--fs) !important;
+    padding: 0 10px !important;
+    border-radius: var(--radius) !important;
+  }
+}
+
+/* iPhone 6/7/8 Plus (414–767.98px) */
+@media (min-width: 414px) and (max-width: 767.98px) {
+  .form{
+    --fs: 13px;        /* font input/select */
+    --fs-label: 15px;  /* font label */
+    --h: 30px;         /* ↓ ngắn hơn (Plus) */
+    --px: 10px;
+    --gap: 10px;
+    --radius: 8px;
+    --border: 1px solid #D1D5DB;
+  }
+
+  .twoCols{
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    column-gap: var(--gap) !important;
+    row-gap: var(--gap) !important;
+  }
+  .span2{ grid-column: 1 / -1 !important; }
+
+  .form :where(label,[class*="label"],[class*="Label"],[class*="LabelRoot"]){
+    font-size: var(--fs-label) !important;
+    line-height: 1.2 !important;
+    margin-bottom: 4px !important;
+  }
+
+  .form :where(input){
+    height: var(--h) !important;
+    font-size: var(--fs) !important;
+    padding: 0 var(--px) !important;
+    border-radius: var(--radius) !important;
+  }
+  .textarea{
+    font-size: var(--fs) !important;
+    min-height: 100px;
+    border-radius: var(--radius) !important;
+  }
+
+  .selectOuter{
+    display: flex !important;
+    align-items: center !important;
+    height: var(--h) !important;
+    border: var(--border) !important;
+    border-radius: var(--radius) !important;
+    background: #fff !important;
+    overflow: hidden;
+  }
+  .leading{
+    height: 100% !important;
+    display: flex !important;
+    align-items: center !important;
+    padding: 0 10px !important;
+    border-right: var(--border) !important;
+    background: #F9FAFB !important;
+  }
+  .leading :where(svg){ width: 16px !important; height: 16px !important; }
+  .selectTrigger{
+    height: 100% !important;
+    border: 0 !important;
+    font-size: var(--fs) !important;
+    padding: 0 var(--px) !important;
+  }
+
+  .btn{
+    height: var(--h) !important;
+    font-size: var(--fs) !important;
+    padding: 0 12px !important;
+    border-radius: var(--radius) !important;
+  }
+}
+
+
+/* ============== iPad (768–1199.98px) ============== */
+@media (min-width: 768px) and (max-width: 1199.98px) {
+  .form{
+    --fs: 14px;        /* chữ trong input/select/textarea */
+    --fs-label: 15px;  /* chữ label */
+    --h: 38px;         /* chiều cao control tiêu chuẩn iPad */
+    --px: 12px;        /* padding ngang */
+    --gap: 12px;
+    --radius: 10px;
+    --border: 1px solid #D1D5DB;
+  }
+
+  /* đồng bộ tất cả label trong form */
+  .form :where(label,[class*="label"],[class*="Label"],[class*="LabelRoot"]){
+    font-size: var(--fs-label) !important;
+    line-height: 1.25 !important;
+    margin-bottom: 4px !important;
+  }
+
+  /* input */
+  .form :where(input){
+    height: var(--h) !important;
+    font-size: var(--fs) !important;
+    padding: 0 var(--px) !important;
+    border-radius: var(--radius) !important;
+  }
+
+  /* textarea */
+  .textarea{
+    font-size: var(--fs) !important;
+    min-height: 120px;
+    border-radius: var(--radius) !important;
+  }
+
+  /* === Select canh đúng chiều cao như input === */
+  .selectOuter{
+    display: flex !important;
+    align-items: center !important;
+    height: var(--h) !important;
+    border: var(--border) !important;
+    border-radius: var(--radius) !important;
+    background: #fff !important;
+    overflow: hidden;
+  }
+  .leading{
+    height: 100% !important;
+    display: flex !important;
+    align-items: center !important;
+    padding: 0 var(--px) !important;
+    border-right: var(--border) !important;
+    background: #F9FAFB !important;
+  }
+  .leading :where(svg){ width: 18px !important; height: 18px !important; }
+
+  .selectTrigger{
+    height: 100% !important;          /* = .selectOuter */
+    min-height: 0 !important;         /* chống min-h mặc định */
+    border: 0 !important;
+    font-size: var(--fs) !important;
+    padding-left: var(--px) !important;
+    padding-right: var(--px) !important;
+    box-shadow: none !important;
+  }
+  .selectItem{ font-size: var(--fs) !important; }
+}
+
+
+/* ============== Desktop (>=1200px) ============== */
+@media (min-width: 1200px) {
+  .form{
+    --fs: 14px;        /* chữ trong input/select/textarea */
+    --fs-label: 16px;  /* chữ label */
+    --h: 40px;         /* chiều cao control */
+    --px: 12px;        /* padding ngang */
+    --gap: 16px;
+    --radius: 10px;
+    --border: 1px solid #D1D5DB;
+  }
+
+  /* nếu bạn đang dùng styles.twoCols cho mobile/tablet, desktop vẫn 2 cột */
+  .twoCols{
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    column-gap: var(--gap) !important;
+    row-gap: var(--gap) !important;
+  }
+  .span2{ grid-column: 1 / -1 !important; }
+
+  /* chuẩn hoá toàn bộ label */
+  .form :where(label,[class*="label"],[class*="Label"],[class*="LabelRoot"]){
+    font-size: var(--fs-label) !important;
+    line-height: 1.25 !important;
+    margin-bottom: 6px !important;
+  }
+  .label{ font-size: var(--fs-label) !important; }
+
+  /* input (kể cả readonly) */
+  .form :where(input){
+    height: var(--h) !important;
+    font-size: var(--fs) !important;
+    padding: 0 var(--px) !important;
+    border-radius: var(--radius) !important;
+  }
+
+  /* textarea */
+  .textarea{
+    font-size: var(--fs) !important;
+    min-height: 140px;
+    border-radius: var(--radius) !important;
+  }
+
+  /* Select đồng bộ chiều cao & icon */
+  .selectOuter{
+    display: flex !important;
+    align-items: center !important;
+    height: var(--h) !important;
+    border: var(--border) !important;
+    border-radius: var(--radius) !important;
+    background: #fff !important;
+    overflow: hidden;
+  }
+  .leading{
+    height: 100% !important;
+    display: flex !important;
+    align-items: center !important;
+    padding: 0 var(--px) !important;
+    border-right: var(--border) !important;
+    background: #F9FAFB !important;
+  }
+  .leading :where(svg){ width: 18px !important; height: 18px !important; }
+
+  .selectTrigger{
+    height: 100% !important;     /* khớp .selectOuter */
+    min-height: 0 !important;
+    border: 0 !important;
+    font-size: var(--fs) !important;
+    padding-left: var(--px) !important;
+    padding-right: var(--px) !important;
+    box-shadow: none !important;
+  }
+  .selectItem{ font-size: var(--fs) !important; }
+
+  /* nút */
+  .btn{
+    height: var(--h) !important;
+    font-size: var(--fs) !important;
+    padding: 0 14px !important;
+    border-radius: var(--radius) !important;
+  }
+
+  /* preview ảnh to hơn chút trên desktop (tuỳ chọn) */
+  .imgPreview{ width: 96px !important; height: 96px !important; }
+}

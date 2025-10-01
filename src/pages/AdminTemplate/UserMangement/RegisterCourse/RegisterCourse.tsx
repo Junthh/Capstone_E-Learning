@@ -151,8 +151,8 @@ export default function RegisterCourse({ taiKhoan, onSuccess }: Props) {
   };
 
   const handleConfirmCourse = (courseId: string) => {
-    enroll({maKhoaHoc: courseId, taiKhoan})
-  }
+    enroll({ maKhoaHoc: courseId, taiKhoan });
+  };
 
   const handleUnenroll = (courseId: string) => {
     unregisterCourse({ maKhoaHoc: courseId, taiKhoan });
@@ -292,15 +292,14 @@ export default function RegisterCourse({ taiKhoan, onSuccess }: Props) {
         </Table>
 
         {/* Pagination riêng cho pending */}
-        
       </div>
       <div className="p-3">
-          <Pagination
-            currentPage={pagePending}
-            totalPages={totalPagesPending}
-            onPageChange={setPagePending}
-          />
-        </div>
+        <Pagination
+          currentPage={pagePending}
+          totalPages={totalPagesPending}
+          onPageChange={setPagePending}
+        />
+      </div>
 
       {/* Khóa học đã ghi danh */}
       <div className="border rounded-md">

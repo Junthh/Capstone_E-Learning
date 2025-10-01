@@ -1,5 +1,6 @@
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useMemo } from "react";
+import styles from "../UserMangement/UserManagement.module.css"
 
 type PaginationProps = {
   currentPage: number;
@@ -40,58 +41,55 @@ export default function Pagination({
   }, [currentPage, totalPages]);
 
   return (
-    <div className="flex items-center justify-center gap-1 mt-4" role="navigation" aria-label="Pagination">
-      {/* Prev */}
+<div
+  className={`${styles.pagination} flex items-center justify-center gap-1 mt-4`}
+  role="navigation"
+  aria-label="Pagination"
+>
+  {/* Prev */}
+  <button
+    type="button"
+    onClick={handlePrev}
+    disabled={currentPage === 1}
+    aria-label="Previous page"
+    className={`${styles.pageBtn} ${currentPage === 1 ? styles.disabled : ""}`}
+  >
+    <ChevronLeft className="w-4 h-4" />
+  </button>
+
+  {pages.map((page, idx) =>
+    page === "..." ? (
+      <span key={`dots-${idx}`} className={styles.dots}>
+        ...
+      </span>
+    ) : (
       <button
         type="button"
-        onClick={handlePrev}
-        disabled={currentPage === 1}
-        aria-label="Previous page"
-        className={`p-2 border rounded ${
-          currentPage === 1
-            ? "opacity-50 cursor-not-allowed"
-            : "hover:bg-gray-50 cursor-pointer"
+        key={`page-${page}`}
+        onClick={() => onPageChange(page as number)}
+        aria-current={currentPage === page ? "page" : undefined}
+        className={`${styles.pageBtn} ${
+          currentPage === page ? styles.active : ""
         }`}
       >
-        <ChevronLeft className="w-4 h-4" />
+        {page}
       </button>
+    )
+  )}
 
-      {pages.map((page, idx) =>
-        page === "..." ? (
-          <span key={`dots-${idx}`} className="px-3 py-1 select-none">
-            ...
-          </span>
-        ) : (
-          <button
-            type="button"
-            key={`page-${page}`}
-            onClick={() => onPageChange(page as number)}
-            aria-current={currentPage === page ? "page" : undefined}
-            className={
-              currentPage === page
-                ? "flex items-center text-sm font-normal rounded-lg cursor-pointer px-3 py-2 shadow-sm hover:shadow-md relative bg-gradient-to-b from-stone-700 to-stone-800 border border-stone-900 text-stone-50 hover:bg-gradient-to-b hover:from-stone-800 hover:to-stone-800 hover:border-stone-900 after:absolute after:inset-0 after:rounded-[inherit] after:box-shadow after:shadow-[inset_0_1px_0px_rgba(255,255,255,0.25),inset_0_-2px_0px_rgba(0,0,0,0.35)] after:pointer-events-none duration-300 ease-in align-middle select-none font-sans text-center antialiased"
-                : "px-3 py-1 border rounded hover:bg-gray-50 cursor-pointer"
-            }
-          >
-            {page}
-          </button>
-        )
-      )}
+  {/* Next */}
+  <button
+    type="button"
+    onClick={handleNext}
+    disabled={currentPage === totalPages}
+    aria-label="Next page"
+    className={`${styles.pageBtn} ${
+      currentPage === totalPages ? styles.disabled : ""
+    }`}
+  >
+    <ChevronRight className="w-4 h-4" />
+  </button>
+</div>
 
-      {/* Next */}
-      <button
-        type="button"
-        onClick={handleNext}
-        disabled={currentPage === totalPages}
-        aria-label="Next page"
-        className={`p-2 border rounded ${
-          currentPage === totalPages
-            ? "opacity-50 cursor-not-allowed"
-            : "hover:bg-gray-50 cursor-pointer"
-        }`}
-      >
-        <ChevronRight className="w-4 h-4" />
-      </button>
-    </div>
   );
 }

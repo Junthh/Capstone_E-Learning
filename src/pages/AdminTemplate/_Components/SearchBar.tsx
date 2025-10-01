@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
+import styles from "./SearchBar.module.css"; // 👈 import css riêng
 
 type Props = {
   onDebouncedChange: (value: string) => void;
@@ -13,7 +14,7 @@ function SearchBar({
   onDebouncedChange,
   placeholder = "Tìm kiếm...",
   delay = 300,
-  className = "relative w-96",
+  className = "",
   defaultValue = "",
 }: Props) {
   const [value, setValue] = useState(defaultValue);
@@ -24,16 +25,16 @@ function SearchBar({
   }, [value, delay, onDebouncedChange]);
 
   return (
-    <div className={className}>
+    <div className={`${styles.searchBox} ${className}`}>
       <Input
         type="text"
         value={value}
         onChange={(e) => setValue(e.target.value)}
         placeholder={placeholder}
-        className="h-12 w-full rounded-lg border border-gray-300 pl-10 pr-4 text-lg"
+        className={`${styles.searchInput}`}
       />
       <svg
-        className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+        className={`${styles.searchIcon}`}
         xmlns="http://www.w3.org/2000/svg"
         width="20"
         height="20"

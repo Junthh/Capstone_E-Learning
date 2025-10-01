@@ -16,6 +16,7 @@ import { addCourseApi, getDetailCourse } from "@/services/course.api";
 import { toast } from "sonner";
 import type { DetailCourse } from "@/interfaces/course.interface";
 import { useAuthStore } from "@/store/auth.store";
+import styles from "@/pages/AdminTemplate/CourseManagement/AddCourse/AddCourse.module.css"
 
 /** URL ảnh http/https hoặc tên file có đuôi ảnh hợp lệ */
 const imagePattern = /^(https?:\/\/.+\.(png|jpe?g|webp|gif)$)|(^[^\/\\]+\.(png|jpe?g|webp|gif)$)/i;
@@ -127,119 +128,210 @@ export default function AddCourse({ onSuccess, onCancel }: Props) {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="grid grid-cols-1 md:grid-cols-2 gap-6 text-lg">
-      <InputWithIcon id="maKhoaHoc" label="Mã khóa học" icon={<Tag size={18} />} placeholder="VD: NODEJS_01"
-        {...register("maKhoaHoc")} error={errors.maKhoaHoc?.message} />
 
-      <InputWithIcon id="tenKhoaHoc" label="Tên khóa học" icon={<FileText size={18} />} placeholder="VD: NodeJS Căn bản"
-        {...register("tenKhoaHoc")} error={errors.tenKhoaHoc?.message} />
 
-      {/* Danh mục / Ngày tạo */}
-      <div className="space-y-1">
-        <Label htmlFor="maDanhMucKhoaHoc" className="text-lg">Danh mục khóa học</Label>
-        <div className="flex items-center rounded-md border border-gray-300 bg-white overflow-hidden">
-          <span className="px-3 bg-gray-50 text-gray-500 border-r border-gray-200 flex items-center">
-            <List size={18} />
-          </span>
-          <Controller
-            control={control}
-            name="maDanhMucKhoaHoc"
-            render={({ field }) => (
-              <Select onValueChange={field.onChange} value={field.value} disabled={loadingCats || catErr}>
-                <SelectTrigger id="maDanhMucKhoaHoc" className="h-11 text-sm border-0 focus:ring-0 focus:ring-offset-0 w-full">
-                  <SelectValue placeholder={loadingCats ? "Đang tải..." : "Chọn danh mục"} />
-                </SelectTrigger>
-                <SelectContent>
-                  {categories.map((c) => (
-                    <SelectItem key={c.maDanhMuc} value={c.maDanhMuc} className="text-sm">
-                      {c.tenDanhMuc}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            )}
-          />
-        </div>
-        {errors.maDanhMucKhoaHoc && <p className="text-sm text-red-600">{errors.maDanhMucKhoaHoc.message}</p>}
-      </div>
+<form
+  onSubmit={handleSubmit(onSubmit)}
+  className={`grid grid-cols-1 md:grid-cols-2 gap-6 text-lg ${styles.form} ${styles.twoCols}`}
+>
+  <InputWithIcon
+    id="maKhoaHoc"
+    label="Mã khóa học"
+    icon={<Tag size={18} />}
+    placeholder="VD: NODEJS_01"
+    {...register("maKhoaHoc")}
+    error={errors.maKhoaHoc?.message}
+  />
 
-      <InputWithIcon id="ngayTao" label="Ngày tạo" type="date" icon={<Calendar size={18} />} placeholder=""
-        {...register("ngayTao")} error={errors.ngayTao?.message} />
+  <InputWithIcon
+    id="tenKhoaHoc"
+    label="Tên khóa học"
+    icon={<FileText size={18} />}
+    placeholder="VD: NodeJS Căn bản"
+    {...register("tenKhoaHoc")}
+    error={errors.tenKhoaHoc?.message}
+  />
 
-      <InputWithIcon id="biDanh" label="Bí danh" icon={<BookOpen size={18} />} placeholder="VD: nodejs-canban"
-        {...register("biDanh")} error={errors.biDanh?.message} />
+  {/* Danh mục */}
+  <div>
+    <Label htmlFor="maDanhMucKhoaHoc" className={styles.label}>
+      Danh mục khóa học
+    </Label>
 
-      <InputWithIcon id="luotXem" label="Lượt xem" type="number" icon={<Eye size={18} />} placeholder="0"
-        {...register("luotXem")} error={errors.luotXem?.message} />
+    {/* Bọc Select để canh đúng chiều cao như input */}
+    <div className={styles.selectOuter}>
+      <span className={styles.leading}>
+        <List size={18} />
+      </span>
 
-      <InputWithIcon id="danhGia" label="Đánh giá (0-5)" type="number" icon={<Star size={18} />} placeholder="0"
-        {...register("danhGia")} error={errors.danhGia?.message} />
-
-      <InputWithIcon id="taiKhoanNguoiTao" label="Tài khoản người tạo" icon={<UserIcon size={18} />}
-        {...register("taiKhoanNguoiTao")} readOnly/>
-
-      <div className="md:col-span-2">
-        <Label htmlFor="hinhAnh" className="text-lg">Hình ảnh</Label>
-        <div className="flex gap-3 items-start mt-1">
-          <div className="flex-1">
-            <InputWithIcon
-              id="hinhAnh"
-              label="" 
-              icon={<ImageIcon size={18} />}
-              placeholder="Dán URL ảnh (http/https, .jpg/.png/...) hoặc bấm 'Chọn file'"
-              {...register("hinhAnh")}
-              error={errors.hinhAnh?.message}
-            />
-          </div>
-
-          <div>
-            <input
-              id="hiddenFileInput"
-              type="file"
-              accept="image/*"
-              className="hidden"
-              onChange={(e) => handlePickFile(e.target.files?.[0] ?? null)}
-            />
-            <Button type="button" variant="secondary" onClick={() => document.getElementById("hiddenFileInput")?.click()}>
-              Chọn file
-            </Button>
-          </div>
-        </div>
-
-        {(localPreview || imagePattern.test(watch("hinhAnh"))) && (
-          <img
-            src={localPreview || watch("hinhAnh")}
-            alt="preview"
-            className="mt-3 h-28 w-28 object-cover rounded-md border"
-            onError={() => setLocalPreview("")}
-          />
+      <Controller
+        control={control}
+        name="maDanhMucKhoaHoc"
+        render={({ field }) => (
+          <Select
+            onValueChange={field.onChange}
+            value={field.value}
+            disabled={loadingCats || catErr}
+          >
+            <SelectTrigger
+              id="maDanhMucKhoaHoc"
+              className={`h-11 text-sm border-0 focus:ring-0 focus:ring-offset-0 w-full ${styles.selectTrigger}`}
+            >
+              <SelectValue
+                placeholder={loadingCats ? "Đang tải..." : "Chọn danh mục"}
+              />
+            </SelectTrigger>
+            <SelectContent>
+              {categories.map((c) => (
+                <SelectItem
+                  key={c.maDanhMuc}
+                  value={c.maDanhMuc}
+                  className={styles.selectItem}
+                >
+                  {c.tenDanhMuc}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         )}
-      </div>
+      />
+    </div>
 
-      <div className="md:col-span-2">
-        <Label className="text-lg">Mô tả khóa học</Label>
-        <textarea
-          className="mt-2 w-full rounded-md border border-gray-300 p-3 text-sm outline-none focus:ring-2 focus:ring-gray-200"
-          rows={5}
-          placeholder="Nhập mô tả"
-          {...register("moTa")}
+    {errors.maDanhMucKhoaHoc && (
+      <p className="text-sm text-red-600">{errors.maDanhMucKhoaHoc.message}</p>
+    )}
+  </div>
+
+  <InputWithIcon
+    id="ngayTao"
+    label="Ngày tạo"
+    type="date"
+    icon={<Calendar size={18} />}
+    placeholder=""
+    {...register("ngayTao")}
+    error={errors.ngayTao?.message}
+  />
+
+  <InputWithIcon
+    id="biDanh"
+    label="Bí danh"
+    icon={<BookOpen size={18} />}
+    placeholder="VD: nodejs-canban"
+    {...register("biDanh")}
+    error={errors.biDanh?.message}
+  />
+
+  <InputWithIcon
+    id="luotXem"
+    label="Lượt xem"
+    type="number"
+    icon={<Eye size={18} />}
+    placeholder="0"
+    {...register("luotXem")}
+    error={errors.luotXem?.message}
+  />
+
+  <InputWithIcon
+    id="danhGia"
+    label="Đánh giá (0-5)"
+    type="number"
+    icon={<Star size={18} />}
+    placeholder="0"
+    {...register("danhGia")}
+    error={errors.danhGia?.message}
+  />
+
+  <InputWithIcon
+    id="taiKhoanNguoiTao"
+    label="Tài khoản người tạo"
+    icon={<UserIcon size={18} />}
+    {...register("taiKhoanNguoiTao")}
+    readOnly
+  />
+
+  {/* Hình ảnh (full width) */}
+  <div className={`md:col-span-2 ${styles.span2}`}>
+    <Label htmlFor="hinhAnh" className={styles.label}>
+      Hình ảnh
+    </Label>
+    <div className="flex gap-3 items-start mt-1">
+      <div className="flex-1">
+        <InputWithIcon
+          id="hinhAnh"
+          label=""
+          icon={<ImageIcon size={18} />}
+          placeholder="Dán URL ảnh (http/https, .jpg/.png/...) hoặc bấm 'Chọn file'"
+          {...register("hinhAnh")}
+          error={errors.hinhAnh?.message}
         />
-        {errors.moTa && <p className="text-sm text-red-600 mt-1">{errors.moTa.message}</p>}
       </div>
-
-      <div className="md:col-span-2 flex flex-wrap items-center justify-end gap-2 text-lg">
-        <Button type="submit" className="text-lg h-11 cursor-pointer" disabled={isSubmitting || isPending}>
-          {isPending ? "Đang thêm..." : "Thêm khóa học"}
-        </Button>
+      <div>
+        <input
+          id="hiddenFileInput"
+          type="file"
+          accept="image/*"
+          className="hidden"
+          onChange={(e) => handlePickFile(e.target.files?.[0] ?? null)}
+        />
         <Button
           type="button"
-          className="text-lg h-11 bg-red-600 text-white hover:bg-red-700 cursor-pointer"
-          onClick={() => onCancel?.()}
-          disabled={isSubmitting || isPending}
+          variant="secondary"
+          onClick={() =>
+            document.getElementById("hiddenFileInput")?.click()
+          }
+          className={styles.btn}
         >
-          Đóng
+          Chọn file
         </Button>
       </div>
-    </form>
+    </div>
+
+    {(localPreview || imagePattern.test(watch("hinhAnh"))) && (
+      <img
+        src={localPreview || watch("hinhAnh")}
+        alt="preview"
+        className="mt-3 h-28 w-28 object-cover rounded-md border"
+        onError={() => setLocalPreview("")}
+      />
+    )}
+  </div>
+
+  {/* Mô tả (full width) */}
+  <div className={`md:col-span-2 ${styles.span2}`}>
+    <Label className={styles.label}>Mô tả khóa học</Label>
+    <textarea
+      className={`mt-2 w-full rounded-md border border-gray-300 p-3 text-sm outline-none focus:ring-2 focus:ring-gray-200 ${styles.textarea}`}
+      rows={5}
+      placeholder="Nhập mô tả"
+      {...register("moTa")}
+    />
+    {errors.moTa && (
+      <p className="text-sm text-red-600 mt-1">{errors.moTa.message}</p>
+    )}
+  </div>
+
+  {/* Nút (full width) */}
+  <div
+    className={`md:col-span-2 flex flex-wrap items-center justify-end gap-2 text-lg ${styles.span2}`}
+  >
+    <Button
+      type="submit"
+      className={`text-lg h-11 cursor-pointer ${styles.btn}`}
+      disabled={isSubmitting || isPending}
+    >
+      {isPending ? "Đang thêm..." : "Thêm khóa học"}
+    </Button>
+    <Button
+      type="button"
+      className={`text-lg h-11 bg-red-600 text-white hover:bg-red-700 cursor-pointer ${styles.btn}`}
+      onClick={() => onCancel?.()}
+      disabled={isSubmitting || isPending}
+    >
+      Đóng
+    </Button>
+  </div>
+</form>
+
+
   );
 }

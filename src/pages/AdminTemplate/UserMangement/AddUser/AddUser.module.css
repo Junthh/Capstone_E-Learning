@@ -1,0 +1,243 @@
+
+/* ===== iPhone 6/7/8 (<=413px) ===== */
+@media (max-width: 413px) {
+  .form{
+    --fs: 11px;        /* font ô nhập */
+    --fs-label: 13px;  /* font label */
+    --h: 28px;         /* chiều cao control */
+    --px: 8px;         /* padding ngang */
+    --gap: 8px;
+    --radius: 6px;
+    --border: 1px solid #D1D5DB;
+  }
+
+  /* chuẩn hoá toàn bộ label trong form (kể cả label nội bộ component) */
+  .form :where(label,[class*="label"],[class*="Label"],[class*="LabelRoot"]){
+    font-size: var(--fs-label) !important;
+    line-height: 1.15 !important;
+    margin-bottom: 4px !important;
+  }
+  .label{ font-size: var(--fs-label) !important; }
+
+  /* input (kể cả password/email/readonly) */
+  .form :where(input){
+    height: var(--h) !important;
+    font-size: var(--fs) !important;
+    padding: 0 var(--px) !important;
+    border-radius: var(--radius) !important;
+    line-height: 1.2 !important;
+  }
+
+  /* Select khớp chiều cao input */
+  .selectOuter{
+    display: flex !important;
+    align-items: center !important;
+    height: var(--h) !important;
+    border: var(--border) !important;
+    border-radius: var(--radius) !important;
+    background: #fff !important;
+    overflow: hidden;
+  }
+  .leading{
+    height: 100% !important;
+    display: flex !important;
+    align-items: center !important;
+    padding: 0 var(--px) !important;
+    border-right: var(--border) !important;
+    background: #F9FAFB !important;
+  }
+  .leading :where(svg){ width: 14px !important; height: 14px !important; }
+
+  .selectTrigger{
+    height: 100% !important;      /* quan trọng: = .selectOuter */
+    border: 0 !important;
+    font-size: var(--fs) !important;
+    padding: 0 var(--px) !important;
+    box-shadow: none !important;
+  }
+  .selectItem{ font-size: var(--fs) !important; }
+
+  .btn{
+    height: var(--h) !important;
+    font-size: var(--fs) !important;
+    padding: 0 10px !important;
+    border-radius: var(--radius) !important;
+  }
+
+  /* co khoảng cách dọc giữa các field nếu muốn */
+  .form :where(.space-y-5){ row-gap: var(--gap) !important; }
+}
+
+/* ===== iPhone 6/7/8 Plus (414–767.98px) ===== */
+@media (min-width: 414px) and (max-width: 767.98px) {
+  .form{
+    --fs: 13px;        /* font ô nhập */
+    --fs-label: 15px;  /* font label */
+    --h: 30px;         /* chiều cao control */
+    --px: 10px;
+    --gap: 10px;
+    --radius: 8px;
+    --border: 1px solid #D1D5DB;
+  }
+
+  .form :where(label,[class*="label"],[class*="Label"],[class*="LabelRoot"]){
+    font-size: var(--fs-label) !important;
+    line-height: 1.2 !important;
+    margin-bottom: 4px !important;
+  }
+  .label{ font-size: var(--fs-label) !important; }
+
+  .form :where(input){
+    height: var(--h) !important;
+    font-size: var(--fs) !important;
+    padding: 0 var(--px) !important;
+    border-radius: var(--radius) !important;
+  }
+
+  .selectOuter{
+    display: flex !important;
+    align-items: center !important;
+    height: var(--h) !important;
+    border: var(--border) !important;
+    border-radius: var(--radius) !important;
+    background: #fff !important;
+    overflow: hidden;
+  }
+  .leading{
+    height: 100% !important;
+    display: flex !important;
+    align-items: center !important;
+    padding: 0 var(--px) !important;
+    border-right: var(--border) !important;
+    background: #F9FAFB !important;
+  }
+  .leading :where(svg){ width: 16px !important; height: 16px !important; }
+
+  .selectTrigger{
+    height: 100% !important;
+    border: 0 !important;
+    font-size: var(--fs) !important;
+    padding: 0 var(--px) !important;
+  }
+  .selectItem{ font-size: var(--fs) !important; }
+
+  .btn{
+    height: var(--h) !important;
+    font-size: var(--fs) !important;
+    padding: 0 12px !important;
+    border-radius: var(--radius) !important;
+  }
+}
+/* ===== iPad (768–1199.98px) ===== */
+@media (min-width: 768px) and (max-width: 1199.98px) {
+  .form{
+    --fs: 14px;        /* chữ trong input/select */
+    --fs-label: 15px;  /* label */
+    --h: 38px;         /* chiều cao control */
+    --px: 12px;        /* padding ngang */
+    --radius: 10px;
+    --border: 1px solid #D1D5DB;
+  }
+
+  .form :where(label,[class*="label"],[class*="Label"],[class*="LabelRoot"]){
+    font-size: var(--fs-label) !important;
+    line-height: 1.25 !important;
+    margin-bottom: 4px !important;
+  }
+
+  /* Input chuẩn */
+  .form :where(input){
+    height: var(--h) !important;
+    font-size: var(--fs) !important;
+    padding: 0 var(--px) !important;
+    border-radius: var(--radius) !important;
+  }
+
+  /* Select = input: container + icon trái + trigger */
+  .selectOuter{
+    display: flex !important;
+    align-items: center !important;
+    height: var(--h) !important;
+    border: var(--border) !important;
+    border-radius: var(--radius) !important;
+    background: #fff !important;
+    overflow: hidden;
+  }
+  .leading{
+    height: 100% !important;
+    display: flex !important;
+    align-items: center !important;
+    padding: 0 var(--px) !important;
+    border-right: var(--border) !important;
+    background: #F9FAFB !important;
+  }
+  .leading :where(svg){ width: 18px !important; height: 18px !important; }
+
+  .selectTrigger{
+    height: 100% !important;     /* khớp .selectOuter */
+    min-height: 0 !important;    /* chặn min-h mặc định */
+    border: 0 !important;
+    font-size: var(--fs) !important;
+    padding-left: var(--px) !important;
+    padding-right: var(--px) !important;
+    line-height: 1 !important;   /* tránh “đội” chiều cao */
+    box-shadow: none !important;
+  }
+  .selectItem{ font-size: var(--fs) !important; }
+}
+
+/* ===== Desktop (>=1200px) ===== */
+@media (min-width: 1200px) {
+  .form{
+    --fs: 14px;
+    --fs-label: 16px;
+    --h: 40px;
+    --px: 12px;
+    --radius: 10px;
+    --border: 1px solid #D1D5DB;
+  }
+
+  .form :where(label,[class*="label"],[class*="Label"],[class*="LabelRoot"]){
+    font-size: var(--fs-label) !important;
+    line-height: 1.25 !important;
+    margin-bottom: 6px !important;
+  }
+
+  .form :where(input){
+    height: var(--h) !important;
+    font-size: var(--fs) !important;
+    padding: 0 var(--px) !important;
+    border-radius: var(--radius) !important;
+  }
+
+  .selectOuter{
+    display: flex !important;
+    align-items: center !important;
+    height: var(--h) !important;
+    border: var(--border) !important;
+    border-radius: var(--radius) !important;
+    background: #fff !important;
+    overflow: hidden;
+  }
+  .leading{
+    height: 100% !important;
+    display: flex !important;
+    align-items: center !important;
+    padding: 0 var(--px) !important;
+    border-right: var(--border) !important;
+    background: #F9FAFB !important;
+  }
+  .leading :where(svg){ width: 18px !important; height: 18px !important; }
+
+  .selectTrigger{
+    height: 100% !important;
+    min-height: 0 !important;
+    border: 0 !important;
+    font-size: var(--fs) !important;
+    padding-left: var(--px) !important;
+    padding-right: var(--px) !important;
+    line-height: 1 !important;
+    box-shadow: none !important;
+  }
+  .selectItem{ font-size: var(--fs) !important; }
+}
