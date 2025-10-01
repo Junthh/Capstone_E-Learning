@@ -144,7 +144,6 @@ export default function AddCourse({onSuccess, onCancel}: Props) {
       Loại người dùng
     </Label>
 
-    {/* Bọc Select để chiều cao = input */}
     <div className={styles.selectOuter}>
       <span className={styles.leading}>
         <Users size={18} />

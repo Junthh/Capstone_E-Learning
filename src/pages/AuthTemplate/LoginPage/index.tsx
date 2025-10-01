@@ -27,7 +27,7 @@ export default function LoginPage() {
     mutationFn: (data: LoginFormInputs) => loginApi(data),
     onSuccess: (currentUser) => {
       setUser(currentUser);
-      navigate(currentUser.maLoaiNguoiDung === "GV" ? "/admin" : "/");
+      navigate(currentUser.maLoaiNguoiDung === "GV" ? "/admin/user-management" : "/");
     },
   });
 
