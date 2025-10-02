@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Loader2 } from 'lucide-react'
+import { Loader2 } from "lucide-react";
 import { useForm } from "react-hook-form";
 import z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -10,6 +10,7 @@ import { useAuthStore } from "@/store/auth.store";
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import styles from "./LoginPage.module.css";
+import { Home } from "lucide-react";
 
 const schema = z.object({
   taiKhoan: z.string().nonempty("Tài khoản không được để trống"),
@@ -27,7 +28,9 @@ export default function LoginPage() {
     mutationFn: (data: LoginFormInputs) => loginApi(data),
     onSuccess: (currentUser) => {
       setUser(currentUser);
-      navigate(currentUser.maLoaiNguoiDung === "GV" ? "/admin/user-management" : "/");
+      navigate(
+        currentUser.maLoaiNguoiDung === "GV" ? "/admin/user-management" : "/"
+      );
     },
   });
 
@@ -49,7 +52,17 @@ export default function LoginPage() {
           rightActive ? styles.containerRightActive : ""
         }`}
       >
-        {/* SIGN UP (bên trái ẩn, để đúng hiệu ứng; bạn có thể navigate tới /auth/register) */}
+        
+        <Button
+          type="button"
+          className={`${styles.backHome} cursor-pointer`}
+          onClick={() => navigate("/")}
+          aria-label="Về trang chủ"
+        >
+          <Home className={styles.backHomeIcon} />
+          <span className={styles.backHomeText}>Trang chủ</span>
+        </Button>
+        {/* SIGN UP (panel chờ để giữ hiệu ứng overlay bên phải) */}
         <div className={`${styles.formContainer} ${styles.signUpContainer}`}>
           <div className="flex items-center justify-center py-20">
             <div className="flex flex-col items-center space-y-4">
@@ -66,6 +79,7 @@ export default function LoginPage() {
           <div className={`${styles.formContainer} ${styles.signInContainer}`}>
             <form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
               <h1 className={styles.title}>Đăng nhập</h1>
+
               <div className={styles.field}>
                 <label className={styles.label}>Tài khoản</label>
                 <Input
@@ -87,16 +101,31 @@ export default function LoginPage() {
                 <div className={styles.error}>{errors.matKhau?.message}</div>
               </div>
 
-              <a className={styles.link} href="#">Quên mật khẩu?</a>
+              <a className={styles.link} href="#"></a>
 
-              <Button type="submit" className={styles.btn} disabled={isPending}>
+              <Button
+                type="submit"
+                className={`${styles.btn} cursor-pointer`}
+                disabled={isPending}
+              >
                 {isPending ? "Đang đăng nhập..." : "Đăng nhập"}
               </Button>
+
+              {/* Nút Đăng ký chỉ cho iPhone 6/7/8 & Plus (ẩn ở md+) */}
+              <div className={styles.mobileCta}>
+                <Button
+                  type="button"
+                  className={`${styles.btn} ${styles.btnAlt} cursor-pointer`}
+                  onClick={() => navigate("/auth/register")}
+                >
+                  Đăng ký
+                </Button>
+              </div>
             </form>
           </div>
         )}
 
-        {/* OVERLAY */}
+        {/* OVERLAY (hiện ở iPad/desktop) */}
         <div className={styles.overlayContainer}>
           <div className={styles.overlay}>
             <div className={`${styles.overlayPanel} ${styles.overlayLeft}`}>
@@ -110,17 +139,18 @@ export default function LoginPage() {
                 Đăng nhập
               </Button>
             </div>
+
             <div className={`${styles.overlayPanel} ${styles.overlayRight}`}>
               <h1 className={styles.title}>Xin chào, bạn mới!</h1>
               <p>Bắt đầu hành trình của bạn cùng chúng tôi</p>
               <Button
                 type="button"
-                className={`${styles.btn} ${styles.btnGhost}`}
+                className={`${styles.btn} ${styles.btnGhost} cursor-pointer`}
                 onClick={() => {
-                  setRightActive(true)
+                  setRightActive(true);
                   setTimeout(() => {
-                    navigate("/auth/register")      // chờ 1400ms rồi mới điều hướng
-                  }, 1400) 
+                    navigate("/auth/register");
+                  }, 1400);
                 }}
               >
                 Đăng ký

@@ -1,146 +1,234 @@
-
+/* ========== BASE ========== */
 .wrap {
-  width: 100%;
-  height: 100vh; 
-  display: flex;
-  justify-content: center; 
-  align-items: center;     
-  font-family: 'Montserrat', system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+  min-height: 100svh; /* ổn định trên iOS */
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  font-family: "Montserrat", system-ui, -apple-system, Segoe UI, Roboto,
+    Helvetica, Arial, sans-serif;
 }
 
 .container {
-  background-color: #fff;
+  width: 90vw;
+  max-width: 1200px;
+  min-height: 65vh;
+  background: #fff;
   border-radius: 20px;
-  box-shadow: 0 32px 80px rgba(0,0,0,0.4);
+  box-shadow: 0 32px 80px rgba(0, 0, 0, 0.4);
   position: relative;
   overflow: hidden;
-
-  width: 90vw;       
-  max-width: 1600px;  
-  min-height: 65vh;   
-  transition: box-shadow .2s ease;
+  transition: box-shadow 0.2s ease;
 }
 
+/* form 2 panel (mặc định cho iPad/desktop) */
 .formContainer {
   position: absolute;
-  top: 0;
-  height: 100%;
-  transition: all 0.6s ease-in-out;
+  inset-block: 0;
   width: 50%;
+  height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: all 0.6s ease-in-out;
 }
-
 .signInContainer {
   left: 0;
   z-index: 2;
 }
-
 .containerRightActive .signInContainer {
   transform: translateX(100%);
 }
-
 .signUpContainer {
   left: 0;
   opacity: 0;
   z-index: 1;
 }
-
 .containerRightActive .signUpContainer {
   transform: translateX(100%);
   opacity: 1;
   z-index: 5;
-  animation: show 0.6s;
 }
 
 @keyframes show {
-  0%, 49.99% { opacity: 0; z-index: 1; }
-  50%, 100%  { opacity: 1; z-index: 5; }
+  0%,
+  49.99% {
+    opacity: 0;
+    z-index: 1;
+  }
+  50%,
+  100% {
+    opacity: 1;
+    z-index: 5;
+  }
 }
-
 
 .form {
-  background-color: #FFFFFF;
+  width: 100%;
+  height: 100%;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  flex-direction: column;
-  padding: 0 80px;  
-  height: 100%;
+  background: #fff;
   text-align: center;
-  width: 100%;
+  padding: 0 80px;
 }
-
 .title {
   font-weight: 800;
-  font-size: 32px;   
+  font-size: 32px;
   margin: 0 0 14px;
 }
-
-.helper {
-  font-size: 15px;
-  color: #555;
-  margin-bottom: 18px;
-}
-
 .field {
   width: 100%;
   margin: 14px 0;
   text-align: left;
 }
-
 .label {
   display: block;
-  font-size: 14px;
   margin-bottom: 8px;
+  font-size: 16px;
   color: #444;
 }
-
-
 .input {
-  background-color: #eee !important;
-  border: none !important;
   width: 100%;
-  padding: 18px 20px !important; 
-  font-size: 16px;
-  border-radius: 8px;
+  border: none !important;
   outline: none;
+  background: #eee !important;
+  border-radius: 8px;
+  padding: 18px 20px !important;
+  font-size: 16px;
+  height: 40px;
 }
-
-
 .error {
   margin-top: 8px;
-  font-size: 13px;
-  color: #e11d48; 
   min-height: 18px;
+  font-size: 13px;
+  color: #e11d48;
 }
 
-.btn {
+.btn,
+.btnAlt {
+  /* đồng bộ chiều cao & căn giữa */
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
   border-radius: 28px !important;
-  border: 1px solid #FF4B2B !important;
-  background-color: #FF4B2B !important;
-  color: #FFFFFF !important;
-  font-size: 15px !important;
   font-weight: 700 !important;
-  padding: 16px 64px !important; 
   letter-spacing: 1px !important;
+  padding: 16px 64px !important;
+  font-size: 15px !important;
   text-transform: uppercase !important;
   transition: transform 80ms ease-in !important;
   margin-top: 18px;
+  height: 45px;
+}
+.btn {
+  background: #ff4b2b !important;
+  color: #fff !important;
+  border: 1px solid #ff4b2b !important;
+}
+.btnAlt {
+  background: #fff !important;
+  color: #ff4b2b !important;
+  border: 1px solid #ff4b2b !important;
 }
 
-.btn:active { transform: scale(0.96); }
+/* ====== Hover/Active/Focus (ĐÃ THÊM) ====== */
+.btn:hover:not(:disabled) {
+  background: #ff5538 !important;
+  border-color: #ff5538 !important;
+  transform: translateY(-1px);
+  box-shadow: 0 10px 24px rgba(255, 75, 43, 0.35);
+  filter: brightness(1.02);
+}
+.btn:active:not(:disabled) {
+  transform: translateY(0);
+  box-shadow: 0 6px 16px rgba(255, 75, 43, 0.22);
+  filter: brightness(0.98);
+}
+.btn:focus-visible {
+  outline: none !important;
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.85),
+    0 0 0 6px rgba(255, 75, 43, 0.55), 0 10px 24px rgba(255, 75, 43, 0.28) !important;
+}
+.btn:disabled {
+  opacity: 0.65 !important;
+  cursor: not-allowed !important;
+  transform: none !important;
+  box-shadow: none !important;
+  filter: none !important;
+}
 
+.btnAlt:hover:not(:disabled) {
+  background: #fff7f4 !important;
+  color: #ff4b2b !important;
+  border-color: #ff6a3d !important;
+  transform: translateY(-1px);
+  box-shadow: 0 8px 18px rgba(255, 106, 61, 0.22);
+}
+.btnAlt:active:not(:disabled) {
+  transform: translateY(0);
+  box-shadow: 0 4px 12px rgba(255, 106, 61, 0.16);
+}
+.btnAlt:focus-visible {
+  outline: none !important;
+  box-shadow: 0 0 0 3px rgba(255, 240, 235, 0.9),
+    0 0 0 6px rgba(255, 106, 61, 0.5), 0 8px 18px rgba(255, 106, 61, 0.22) !important;
+}
 
+/* Nút ghost dùng trong overlay: thêm class .btnGhost trong TSX nếu chưa có */
 .btnGhost {
-  background-color: transparent !important;
-  border-color: #FFFFFF !important;
+  background: transparent !important;
+  color: #fff !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.6) !important;
+  border-radius: 999px !important;
+  padding: 16px 64px !important; 
+  font-weight: 800 !important;
+  letter-spacing: 0.3px !important;
+  backdrop-filter: saturate(130%) blur(2px);
+  transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease,
+    border-color 0.18s ease !important;
+}
+.btnGhost:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.12) !important;
+  border-color: #fff !important;
+  transform: translateY(-1px);
+  box-shadow: 0 12px 26px rgba(0, 0, 0, 0.28),
+    inset 0 0 20px rgba(255, 255, 255, 0.06);
+}
+.btnGhost:active:not(:disabled) {
+  transform: translateY(0);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2),
+    inset 0 0 10px rgba(255, 255, 255, 0.05);
+}
+.btnGhost:focus-visible {
+  outline: none !important;
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.9),
+    0 0 0 6px rgba(255, 255, 255, 0.4) !important;
 }
 
+/* Tránh kẹt hover trên thiết bị cảm ứng */
+@media (hover: none) {
+  .btn:hover,
+  .btnAlt:hover,
+  .btnGhost:hover {
+    transform: none !important;
+    box-shadow: none !important;
+    filter: none !important;
+  }
+}
+
+.link {
+  color: #333;
+  font-size: 14px;
+  text-decoration: none;
+  margin-top: 12px;
+}
+
+/* overlay (panel phải) cho iPad/desktop */
 .overlayContainer {
   position: absolute;
-  top: 0;
+  inset-block: 0;
   left: 50%;
   width: 50%;
   height: 100%;
@@ -148,70 +236,298 @@
   transition: transform 0.6s ease-in-out;
   z-index: 100;
 }
-
-.containerRightActive .overlayContainer { transform: translateX(-100%); }
-
+.containerRightActive .overlayContainer {
+  transform: translateX(-100%);
+}
 .overlay {
-  background: linear-gradient(to right, #FF4B2B, #FF416C);
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: 0 0;
-  color: #FFFFFF;
   position: relative;
   left: -100%;
-  height: 100%;
   width: 200%;
+  height: 100%;
+  color: #fff;
+  background: linear-gradient(to right, #ff4b2b, #ff416c);
+  background-size: cover;
+  background-repeat: no-repeat;
   transform: translateX(0);
   transition: transform 0.6s ease-in-out;
 }
-
-.containerRightActive .overlay { transform: translateX(50%); }
-
+.containerRightActive .overlay {
+  transform: translateX(50%);
+}
 .overlayPanel {
   position: absolute;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  padding: 0 48px;
-  text-align: center;
   top: 0;
   height: 100%;
   width: 50%;
-  transform: translateX(0);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 0 48px;
   transition: transform 0.6s ease-in-out;
 }
-
-.overlayLeft { transform: translateX(-20%); }
-.containerRightActive .overlayLeft { transform: translateX(0); }
-
-.overlayRight { right: 0; }
-.containerRightActive .overlayRight { transform: translateX(20%); }
-
-
-.socialRow {
-  margin: 18px 0 10px;
-  display: flex;
-  gap: 12px;
+.overlayLeft {
+  transform: translateX(-20%);
+}
+.containerRightActive .overlayLeft {
+  transform: translateX(0);
+}
+.overlayRight {
+  right: 0;
+}
+.containerRightActive .overlayRight {
+  transform: translateX(20%);
 }
 
-.social {
-  border: 1px solid #DDDDDD;
-  border-radius: 50%;
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
-  height: 44px; width: 44px;
-  color: #222;
-  text-decoration: none;
-  font-weight: 700;
+/* Nút “Đăng ký” riêng cho mobile – mặc định ẩn */
+.mobileCta {
+  display: none;
 }
 
-.link {
-  color: #333;
-  font-size: 14px;
-  text-decoration: none;
-  margin: 12px 0 0;
+/* ========== iPHONE 6/7/8 (<=413px) ========== */
+@media (max-width: 413px) {
+  .wrap {
+    padding: 12px;
+  }
+  .container {
+    width: 100%;
+    max-width: 100%;
+    min-height: 88vh;
+    border-radius: 14px;
+    box-shadow: 0 18px 48px rgba(0, 0, 0, 0.25);
+  }
+
+  /* 1 cột – tắt overlay */
+  .formContainer {
+    position: relative !important;
+    width: 100% !important;
+    height: auto !important;
+    left: 0 !important;
+    transform: none !important;
+    z-index: 1 !important;
+  }
+  .signUpContainer,
+  .overlayContainer {
+    display: none !important;
+  }
+
+  .form {
+    padding: 110px 18px;
+  }
+  .title {
+    font-size: 22px;
+    margin-bottom: 10px;
+  }
+  .label {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 6px;
+  }
+  .input {
+    padding: 12px 14px !important;
+    font-size: 13px;
+  }
+  .error {
+    font-size: 12px;
+    min-height: 16px;
+  }
+
+  .field {
+    margin: 5px 0 !important;
+  }
+
+  /* 2 nút đều nhau */
+  .btn,
+  .btnAlt {
+    width: 250px !important;
+    padding: 10px 0 !important;
+    font-size: 12px !important;
+    border-radius: 18px !important;
+    letter-spacing: 0.5px !important;
+  }
+  .mobileCta {
+    display: flex !important;
+    justify-content: center;
+  }
 }
 
+/* ========== iPHONE 6/7/8 PLUS (414–767.98px) ========== */
+@media (min-width: 414px) and (max-width: 767.98px) {
+  .wrap {
+    padding: 16px;
+  }
+  .container {
+    width: 100%;
+    max-width: 600px;
+    min-height: 88vh;
+    border-radius: 16px;
+    box-shadow: 0 22px 56px rgba(0, 0, 0, 0.28);
+  }
 
+  .formContainer {
+    position: relative !important;
+    width: 100% !important;
+    height: auto !important;
+    left: 0 !important;
+    transform: none !important;
+    z-index: 1 !important;
+  }
+  .signUpContainer,
+  .overlayContainer {
+    display: none !important;
+  }
+
+  .form {
+    padding: 140px 22px;
+  }
+  .title {
+    font-size: 24px;
+    margin-bottom: 12px;
+  }
+  .label {
+    font-size: 16px;
+    font-weight: 600;
+  }
+
+  .field {
+    margin: 5px 0 !important;
+  }
+
+  .btn,
+  .btnAlt {
+    width: 250px !important;
+    padding: 10px 0 !important;
+    font-size: 12.5px !important;
+    border-radius: 18px !important;
+    letter-spacing: 0.5px !important;
+  }
+  .mobileCta {
+    display: flex !important;
+    justify-content: center;
+    margin-top: 8px;
+  }
+}
+
+/* ========== iPAD (768–1199.98px) ========== */
+@media (min-width: 768px) and (max-width: 1199.98px) {
+  .container {
+    width: 92vw;
+    max-width: 980px;
+    min-height: 70vh;
+    border-radius: 18px;
+    box-shadow: 0 26px 64px rgba(0, 0, 0, 0.3);
+    margin: 0 auto;
+  }
+
+  /* Giữ bố cục 2 nửa ngay ngắn */
+  .form {
+    padding: 0 56px !important;
+  }
+  .overlayPanel {
+    padding: 0 40px !important;
+  }
+
+  /* Ẩn nút mobile để không có 2 nút đăng ký */
+  .mobileCta {
+    display: none !important;
+  }
+
+  .field {
+    margin: 0 0 !important;
+  }
+}
+
+/* ========== DESKTOP (>=1200px) ========== */
+@media (min-width: 1200px) {
+  .container {
+    width: 80vw;
+    max-width: 1200px;
+    min-height: 68vh;
+    border-radius: 20px;
+    box-shadow: 0 28px 72px rgba(0, 0, 0, 0.32);
+    margin: 0 auto;
+  }
+  .form {
+    padding: 0 96px;
+  }
+  .overlayPanel {
+    padding: 0 48px;
+  }
+  .mobileCta {
+    display: none !important;
+  }
+}
+/* ===== NÚT QUAY VỀ TRANG CHỦ (góc trên-trái của khung) ===== */
+.backHome {
+  position: absolute !important;
+  top: 14px;
+  left: 14px;
+  z-index: 120; /* cao hơn overlay */
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 8px;
+  padding: 8px 12px !important;
+  border-radius: 999px !important;
+  background: #ffffff !important;
+  color: #0f172a !important; /* slate-900 */
+  border: 1px solid #e5e7eb !important; /* gray-200 */
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08) !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.2px !important;
+  transition: transform 0.18s ease, box-shadow 0.18s ease,
+    border-color 0.18s ease !important;
+}
+.backHome:hover {
+  transform: translateY(-1px);
+  border-color: #ff6a3d !important;
+  box-shadow: 0 10px 24px rgba(255, 106, 61, 0.2) !important;
+}
+.backHome:active {
+  transform: translateY(0);
+}
+
+.backHomeIcon {
+  width: 18px;
+  height: 18px;
+}
+
+.backHomeText {
+  font-size: 13.5px;
+  line-height: 1;
+}
+
+/* Gọn hơn trên màn nhỏ */
+@media (max-width: 413px) {
+  .backHome {
+    top: 10px;
+    left: 10px;
+    padding: 7px 10px !important;
+  }
+  .backHomeIcon {
+    width: 16px;
+    height: 16px;
+  }
+  .backHomeText {
+    font-size: 11px;
+  }
+}
+
+/* iPhone Plus */
+@media (min-width: 414px) and (max-width: 767.98px) {
+  .backHome {
+    top: 12px;
+    left: 12px;
+  }
+  .backHomeText {
+    font-size: 13px;
+  }
+}
+
+/* iPad/Desktop: giữ kích thước thoáng */
+@media (min-width: 768px) {
+  .backHome {
+    top: 16px;
+    left: 16px;
+  }
+}

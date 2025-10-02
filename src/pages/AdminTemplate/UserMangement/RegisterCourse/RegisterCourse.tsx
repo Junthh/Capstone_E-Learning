@@ -209,7 +209,7 @@ export default function RegisterCourse({ taiKhoan, onSuccess }: Props) {
         </Select>
         <Button
           onClick={handleEnroll}
-          className="h-11 px-5 bg-black text-white text-lg"
+          className="h-11 px-5 bg-black text-white text-lg cursor-pointer"
           disabled={loadingCourses || errorCourses || enrolling}
         >
           {enrolling ? "Đang ghi danh..." : "Ghi danh"}

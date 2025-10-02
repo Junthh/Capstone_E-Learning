@@ -149,3 +149,117 @@
     padding: 0 10px !important;
   }
 }
+
+
+/* ===== iPad (768–1199.98px) ===== */
+@media (min-width: 768px) and (max-width: 1199.98px) {
+  .form{
+    --fs: 14px;           /* chữ input/select */
+    --fs-label: 15px;     /* label */
+    --control-h: 38px;    /* chiều cao control */
+    --pad-x: 12px;
+    --radius: 10px;
+    --border: 1px solid #D1D5DB;
+  }
+
+  /* chuẩn hoá label */
+  .form :where(label,[class*="label"],[class*="Label"],[class*="LabelRoot"]) {
+    font-size: var(--fs-label) !important;
+    line-height: 1.25 !important;
+    margin-bottom: 4px !important;
+  }
+
+  /* input */
+  .form :where(input){
+    height: var(--control-h) !important;
+    font-size: var(--fs) !important;
+    padding: 0 var(--pad-x) !important;
+    border-radius: var(--radius) !important;
+  }
+
+  /* === Select bằng chiều cao input === */
+  .selectGroup{
+    display: flex !important;
+    align-items: center !important;
+    height: var(--control-h) !important;
+    border: var(--border) !important;
+    border-radius: var(--radius) !important;
+    background: #fff !important;
+    overflow: hidden;
+  }
+  .leading{
+    height: 100% !important;
+    display: flex !important;
+    align-items: center !important;
+    padding: 0 var(--pad-x) !important;
+    border-right: var(--border) !important;
+    background: #F9FAFB !important;
+  }
+  .leading :where(svg){ width: 18px !important; height: 18px !important; }
+
+  .selectTrigger{
+    height: 100% !important;       /* = .selectGroup */
+    min-height: 0 !important;      /* chặn min-h mặc định */
+    border: 0 !important;
+    font-size: var(--fs) !important;
+    padding-left: var(--pad-x) !important;
+    padding-right: var(--pad-x) !important;
+    box-shadow: none !important;
+  }
+  .selectItem{ font-size: var(--fs) !important; }
+}
+
+/* ===== Desktop (>=1200px) ===== */
+@media (min-width: 1200px) {
+  .form{
+    --fs: 14px;
+    --fs-label: 16px;
+    --control-h: 40px;
+    --pad-x: 12px;
+    --radius: 10px;
+    --border: 1px solid #D1D5DB;
+  }
+
+  .form :where(label,[class*="label"],[class*="Label"],[class*="LabelRoot"]) {
+    font-size: var(--fs-label) !important;
+    line-height: 1.25 !important;
+    margin-bottom: 6px !important;
+  }
+
+  .form :where(input){
+    height: var(--control-h) !important;
+    font-size: var(--fs) !important;
+    padding: 0 var(--pad-x) !important;
+    border-radius: var(--radius) !important;
+  }
+
+  .selectGroup{
+    display: flex !important;
+    align-items: center !important;
+    height: var(--control-h) !important;
+    border: var(--border) !important;
+    border-radius: var(--radius) !important;
+    background: #fff !important;
+    overflow: hidden;
+  }
+  .leading{
+    height: 100% !important;
+    display: flex !important;
+    align-items: center !important;
+    padding: 0 var(--pad-x) !important;
+    border-right: var(--border) !important;
+    background: #F9FAFB !important;
+  }
+  .leading :where(svg){ width: 18px !important; height: 18px !important; }
+
+  .selectTrigger{
+    height: 100% !important;
+    min-height: 0 !important;
+    border: 0 !important;
+    font-size: var(--fs) !important;
+    padding-left: var(--pad-x) !important;
+    padding-right: var(--pad-x) !important;
+    box-shadow: none !important;
+  }
+  .selectItem{ font-size: var(--fs) !important; }
+}

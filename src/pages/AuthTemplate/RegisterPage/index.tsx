@@ -1,3 +1,4 @@
+// RegisterPage.tsx
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -6,10 +7,10 @@ import z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
-import styles from "../LoginPage/LoginPage.module.css"; // tái sử dụng CSS
+import styles from "./RegisterPage.module.css"; // ✅ dùng CSS module mới
 import { registerApi } from "@/services/auth.api";
+import { Home } from "lucide-react";
 
-// schema validate
 const schema = z.object({
   taiKhoan: z.string().nonempty("Tài khoản không được để trống"),
   matKhau: z.string().min(6, "Mật khẩu tối thiểu 6 ký tự"),
@@ -18,7 +19,6 @@ const schema = z.object({
   maNhom: z.literal("GP01"),
   email: z.string().email("Email không hợp lệ"),
 });
-
 type RegisterInputs = z.infer<typeof schema>;
 
 export default function RegisterPage() {
@@ -28,7 +28,7 @@ export default function RegisterPage() {
   const { mutate: handleRegister, isPending } = useMutation({
     mutationFn: (data: RegisterInputs) => registerApi(data),
     onSuccess: () => {
-      navigate("/auth/login"); // sau khi đăng ký thành công
+      navigate("/auth/login");
     },
   });
 
@@ -57,11 +57,22 @@ export default function RegisterPage() {
           rightActive ? styles.containerRightActive : ""
         }`}
       >
+
+        <Button
+          type="button"
+          className={`${styles.backHome} cursor-pointer`}
+          onClick={() => navigate("/")}
+          aria-label="Về trang chủ"
+        >
+          <Home className={styles.backHomeIcon} />
+          <span className={styles.backHomeText}>Trang chủ</span>
+        </Button>
+
+
         {/* REGISTER FORM */}
         <div className={`${styles.formContainer} ${styles.signUpContainer}`}>
           <form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
             <h1 className={styles.title}>Tạo tài khoản</h1>
-            <p className={styles.helper}>Nhập thông tin bên dưới để đăng ký</p>
 
             <div className={styles.field}>
               <label className={styles.label}>Họ tên</label>
@@ -115,32 +126,53 @@ export default function RegisterPage() {
               <div className={styles.error}>{errors.matKhau?.message}</div>
             </div>
 
-            <Button type="submit" className={styles.btn} disabled={isPending}>
+            <Button type="submit" className={`${styles.btn} cursor-pointer`} disabled={isPending}>
               {isPending ? "Đang đăng ký..." : "Đăng ký"}
             </Button>
+
+            {/* ✅ Mobile switcher: chỉ hiện ở màn nhỏ (đã CSS) */}
+            <div className={styles.mobileSwitcher}>
+              <Button
+                type="button"
+                className={styles.switchBtn}
+                onClick={() => navigate("/auth/login")}
+              >
+                Đã có tài khoản? Đăng nhập
+              </Button>
+            </div>
           </form>
         </div>
 
-        {/* OVERLAY */}
+        {/* OVERLAY (ẩn trên mobile qua CSS) */}
         <div className={styles.overlayContainer}>
           <div className={styles.overlay}>
             <div className={`${styles.overlayPanel} ${styles.overlayLeft}`}>
-              <h1 className={styles.title}>Chào mừng trở lại!</h1>
+              <h1
+                className={styles.title}
+                style={{ color: "#fff", textAlign: "center" }}
+              >
+                Chào mừng trở lại!
+              </h1>
               <p>Đăng nhập để tiếp tục</p>
               <Button
                 type="button"
-                className={`${styles.btn} ${styles.btnGhost}`}
+                className={`${styles.btnGhost} cursor-pointer`}
                 onClick={() => navigate("/auth/login")}
               >
                 Đăng nhập
               </Button>
             </div>
             <div className={`${styles.overlayPanel} ${styles.overlayRight}`}>
-              <h1 className={styles.title}>Xin chào, bạn mới!</h1>
+              <h1
+                className={styles.title}
+                style={{ color: "#fff", textAlign: "center" }}
+              >
+                Xin chào, bạn mới!
+              </h1>
               <p>Nhập thông tin để tạo tài khoản</p>
               <Button
                 type="button"
-                className={`${styles.btn} ${styles.btnGhost}`}
+                className={`${styles.btnGhost}`}
                 onClick={() => setRightActive(true)}
               >
                 Đăng ký

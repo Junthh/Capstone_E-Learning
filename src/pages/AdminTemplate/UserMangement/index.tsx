@@ -220,7 +220,10 @@ export default function UserManagement() {
               <DialogHeader>
                 <DialogTitle className="text-xl">Thêm người dùng</DialogTitle>
               </DialogHeader>
-              <AddUser onSuccess={() => setOpen(false)} />
+              <AddUser
+                onSuccess={() => setOpen(false)}
+                onCancel={() => setOpen(false)}
+              />
             </DialogContent>
           </Dialog>
 

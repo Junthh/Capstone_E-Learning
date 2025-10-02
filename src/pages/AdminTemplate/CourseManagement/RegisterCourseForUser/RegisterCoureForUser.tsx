@@ -127,7 +127,7 @@ export default function RegisterCourseForUser({ maKhoaHoc, onSuccess }: Props) {
     return pendingList.slice(start, start + pageSize);
   }, [pendingList, pagePending]);
 
-  // ✅ Mutation ghi danh
+  // Mutation ghi danh
   const { mutate: enroll, isPending: enrolling } = useMutation({
     mutationFn: (payload: RegisterCourseRequest) => registerSCourseApi(payload),
     onSuccess: () => {
@@ -169,7 +169,7 @@ export default function RegisterCourseForUser({ maKhoaHoc, onSuccess }: Props) {
       onValueChange={(v) => setSelected(v)}
       disabled={loadingUsers || enrolling}
     >
-      <SelectTrigger className={`w-[260px] h-11 text-lg ${styles.selectBox}`}>
+      <SelectTrigger className={`w-[260px] h-11 text-lg cursor-pointer ${styles.selectBox}`}>
         <SelectValue placeholder="Chọn tài khoản" />
       </SelectTrigger>
       <SelectContent>
@@ -179,7 +179,7 @@ export default function RegisterCourseForUser({ maKhoaHoc, onSuccess }: Props) {
             <SelectItem
               key={u.taiKhoan}
               value={u.taiKhoan}
-              className={`text-lg ${styles.selectItem}`}
+              className={`text-lg cursor-pointer ${styles.selectItem}`}
             >
               {u.hoTen} ({u.taiKhoan})
             </SelectItem>
@@ -189,7 +189,7 @@ export default function RegisterCourseForUser({ maKhoaHoc, onSuccess }: Props) {
 
     <Button
       onClick={handleEnrollForUser}
-      className={`h-11 px-5 bg-black text-white text-lg ${styles.submitBtn}`}
+      className={`h-11 px-5 bg-black text-white text-lg cursor-pointer ${styles.submitBtn}`}
       disabled={loadingUsers || !!errorUsers || enrolling}
     >
       {enrolling ? "Đang ghi danh..." : "Ghi danh"}
