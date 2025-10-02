@@ -184,6 +184,7 @@ export default function CourseManagement() {
                     queryKey: ["manager-course"],
                   });
                 }}
+                onCancel={() => setOpen(false)}
               />
             </DialogContent>
           </Dialog>

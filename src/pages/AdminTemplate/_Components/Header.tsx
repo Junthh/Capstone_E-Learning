@@ -45,9 +45,7 @@ export default function Header({ onMenuClick }: HeaderProps) {
   return (
     <header className="sticky top-0 z-30 bg-white/95 backdrop-blur border-b border-stone-200">
       <div className="h-12 md:h-14 lg:h-16 px-3 sm:px-4 md:px-6 flex items-center justify-between">
-        {/* Left: Menu (mobile) + brand */}
         <div className="flex items-center gap-2">
-          {/* Hamburger chỉ hiện ở <lg */}
           <Button
             type="button"
             variant="outline"
@@ -58,16 +56,12 @@ export default function Header({ onMenuClick }: HeaderProps) {
           >
             <Menu className="size-4" />
           </Button>
-
-          {/* Brand / tiêu đề: nhỏ ở mobile, lớn dần ở md+ */}
           <h1 className="text-sm sm:text-base md:text-lg font-semibold text-stone-900">
-            E-Learning Admin
+           
           </h1>
         </div>
 
-        {/* Right: user + logout */}
         <div className="flex items-center gap-2 sm:gap-3 md:gap-4">
-          {/* Avatar: HV/GV theo vai trò hoặc initials */}
           <div
             className="inline-flex items-center justify-center rounded-full bg-stone-100 text-stone-700 size-7 sm:size-8 md:size-9"
             title={roleBadge ? `${displayName} • ${roleBadge}` : displayName}
@@ -78,7 +72,6 @@ export default function Header({ onMenuClick }: HeaderProps) {
             </span>
           </div>
 
-          {/* Tên: ẩn ở mobile, hiện từ md+ */}
           <span
             className="hidden md:inline-block max-w-[200px] lg:max-w-[260px] truncate text-sm md:text-base font-medium text-stone-700"
             title={displayName}
@@ -86,11 +79,10 @@ export default function Header({ onMenuClick }: HeaderProps) {
             {displayName}
           </span>
 
-          {/* Logout: icon-only ở mobile, có chữ ở md+ */}
           <Button
             variant="outline"
             size="icon"
-            className="md:hidden size-8 rounded-full"
+            className="md:hidden size-8 rounded-full cursor-pointer"
             onClick={handleLogout}
             aria-label="Đăng xuất"
             title="Đăng xuất"
@@ -99,7 +91,7 @@ export default function Header({ onMenuClick }: HeaderProps) {
           </Button>
           <Button
             variant="outline"
-            className="hidden md:inline-flex h-9 lg:h-10 text-sm md:text-base"
+            className="hidden md:inline-flex h-9 lg:h-10 text-sm md:text-base cursor-pointer"
             onClick={handleLogout}
           >
             <LogOut className="mr-2 size-4" />

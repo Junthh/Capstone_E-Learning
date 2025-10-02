@@ -277,3 +277,21 @@
   .pageBtn { min-width: 30px; height: 30px; font-size: 12px; border-radius: 6px; }
   .dots { font-size: 12px; }
 }
+
+
+@media (min-width: 1200px) {
+  /* Cho phép xuống hàng toàn bảng */
+  .courseTable :where(th, td){
+    white-space: normal !important;
+    word-break: break-word !important;      /* chia từ dài */
+    overflow-wrap: anywhere !important;     /* URL/chuỗi liền nhau vẫn bẻ */
+  }
+
+  /* Nếu muốn cột "Tên khóa" ưu tiên rộng hơn để wrap đẹp */
+  .courseTable th:nth-child(3),
+  .courseTable td:nth-child(3){             /* cột Tên khóa */
+    width: 24% !important;                  /* tuỳ bạn chỉnh 22–28% */
+  }
+
+  
+}

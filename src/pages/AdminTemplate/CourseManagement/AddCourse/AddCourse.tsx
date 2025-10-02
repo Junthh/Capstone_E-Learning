@@ -260,7 +260,7 @@ export default function AddCourse({ onSuccess, onCancel }: Props) {
           id="hinhAnh"
           label=""
           icon={<ImageIcon size={18} />}
-          placeholder="Dán URL ảnh (http/https, .jpg/.png/...) hoặc bấm 'Chọn file'"
+          placeholder="bấm 'Chọn file'"
           {...register("hinhAnh")}
           error={errors.hinhAnh?.message}
         />
@@ -279,7 +279,7 @@ export default function AddCourse({ onSuccess, onCancel }: Props) {
           onClick={() =>
             document.getElementById("hiddenFileInput")?.click()
           }
-          className={styles.btn}
+          className={`${styles.btn} cursor-pointer`}
         >
           Chọn file
         </Button>

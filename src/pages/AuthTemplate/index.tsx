@@ -5,7 +5,7 @@ export default function AuthTemplate() {
   const { user } = useAuthStore()
   
   if(user && user.maLoaiNguoiDung === 'GV'){
-    return <Navigate to="/admin" />
+    return <Navigate to="/admin/user-management" />
   }
 
   if(user && user.maLoaiNguoiDung === 'HV'){

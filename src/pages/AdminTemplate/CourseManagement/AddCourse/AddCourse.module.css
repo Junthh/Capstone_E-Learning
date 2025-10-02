@@ -290,13 +290,6 @@
   }
   .selectItem{ font-size: var(--fs) !important; }
 
-  /* nút */
-  .btn{
-    height: var(--h) !important;
-    font-size: var(--fs) !important;
-    padding: 0 14px !important;
-    border-radius: var(--radius) !important;
-  }
 
   /* preview ảnh to hơn chút trên desktop (tuỳ chọn) */
   .imgPreview{ width: 96px !important; height: 96px !important; }

@@ -98,8 +98,20 @@ export default function EditUser({ taiKhoan, onSuccess, onCancel }: Props) {
       onSuccess?.();
     },
     onError: (err: any) => {
-      toast.error("Cập nhật thất bại");
-      console.error(err);
+      const d = err?.response?.data;
+      const msg =
+        d?.errors?.Email?.[0] ||
+        d?.errors?.email?.[0] ||
+        (d?.errors && Object.values(d.errors).flat?.()[0]) ||
+        d?.content ||
+        d?.message ||
+        d?.Message ||
+        d?.error ||
+        (typeof d === "string" ? d : "") ||
+        err?.message ||
+        "Có lỗi xảy ra";
+
+      toast.error(msg);
     },
   });
 
@@ -208,13 +220,13 @@ export default function EditUser({ taiKhoan, onSuccess, onCancel }: Props) {
       </div>
 
       <div className="flex flex-wrap items-center justify-end gap-2 text-lg">
-        <Button type="submit" className="text-lg h-11">
+        <Button type="submit" className="text-lg h-11 cursor-pointer">
           {isSubmitting ? "Đang lưu..." : "Lưu thay đổi"}
         </Button>
 
         <Button
           type="button"
-          className="text-lg h-11 bg-red-600 text-white hover:bg-red-700"
+          className="text-lg h-11 bg-red-600 text-white hover:bg-red-700 cursor-pointer"
           onClick={() => onCancel?.()}
         >
           Hủy
