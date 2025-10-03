@@ -571,13 +571,17 @@
     display: flex !important;
     flex-direction: column !important;
     gap: 14px !important;
-    padding: 32px 64px !important;
+    padding: 10px 64px !important;
 
     grid-template-columns: unset !important;
     grid-auto-rows: unset !important;
     grid-auto-flow: unset !important;
     column-gap: 0 !important;
     row-gap: 0 !important;
+  }
+
+  .field {
+    margin: 5px 0 0 0;
   }
 
   .title,

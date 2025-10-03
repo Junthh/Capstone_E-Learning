@@ -1,5 +1,4 @@
 import { BookOpen } from 'lucide-react'
-import { Button } from '@/components/ui/button'
 import type { Course } from '@/interfaces/course.interface'
 
 export default function CourseContent({ course }: { course: Course }) {
