@@ -57,6 +57,24 @@ export default function CourseManagement() {
 
   const queryClient = useQueryClient();
 
+  // 🔄 GỘP LÀM MỚI DỮ LIỆU (phân trang + search)
+  const refreshCourses = async () => {
+    await queryClient.invalidateQueries({
+      queryKey: ["manager-course"],
+      exact: false,
+    });
+    await queryClient.invalidateQueries({
+      queryKey: ["all-courses"],
+      exact: false,
+    });
+    // ép refetch ngay các query active (đặc biệt all-courses khi đang search)
+    await queryClient.refetchQueries({
+      queryKey: ["all-courses"],
+      exact: false,
+      type: "active",
+    });
+  };
+
   // List Course
   const { data, isLoading, isError } = useQuery<pageResult<Course>>({
     queryKey: ["manager-course", page, pageSize],
@@ -96,9 +114,9 @@ export default function CourseManagement() {
 
   const { mutate: deteleCourse } = useMutation({
     mutationFn: (maKhoaHoc: string) => deleteCourseApi(maKhoaHoc),
-    onSuccess: () => {
+    onSuccess: async () => {
       toast.success("Đã xoá khóa học thành công!");
-      queryClient.invalidateQueries({ queryKey: ["manager-course"] });
+      await refreshCourses();
     },
     onError: (err: any) => {
       const d = err?.response?.data;
@@ -178,11 +196,9 @@ export default function CourseManagement() {
               </DialogHeader>
               <AddCourse
                 taiKhoanNguoiTao={taiKhoanDangNhap}
-                onSuccess={() => {
+                onSuccess={async () => {
                   setOpen(false);
-                  queryClient.invalidateQueries({
-                    queryKey: ["manager-course"],
-                  });
+                  await refreshCourses();
                 }}
                 onCancel={() => setOpen(false)}
               />
@@ -198,11 +214,9 @@ export default function CourseManagement() {
               {editingCourse && (
                 <EditCourse
                   maKhoaHoc={editingCourse}
-                  onSuccess={() => {
+                  onSuccess={async () => {
                     setOpenEdit(false);
-                    queryClient.invalidateQueries({
-                      queryKey: ["manager-course"],
-                    });
+                    await refreshCourses();
                   }}
                   onCancel={() => setOpenEdit(false)}
                 />

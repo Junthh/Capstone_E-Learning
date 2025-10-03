@@ -34,7 +34,6 @@ import type { DetailCourse } from "@/interfaces/course.interface";
 import { useAuthStore } from "@/store/auth.store";
 import styles from "@/pages/AdminTemplate/CourseManagement/EditCourse/EditCourse.module.css";
 
-/** Cho phép URL http/https hoặc tên file có đuôi ảnh hợp lệ */
 const imagePattern =
   /^(https?:\/\/.+\.(png|jpe?g|webp|gif)$)|(^[^\/\\]+\.(png|jpe?g|webp|gif)$)/i;
 
@@ -51,10 +50,8 @@ const schema = z.object({
     (v) => (typeof v === "string" && v.trim() !== "" ? Number(v) : v),
     z.number().int().min(0, "Đánh giá phải ≥ 0")
   ),
-  hinhAnh: z
-    .string()
-    .min(1, "Vui lòng nhập URL hoặc chọn file ảnh")
-    .regex(imagePattern, "Hình ảnh không đúng định dạng (.png/.jpg/.jpeg/.webp/.gif)"),
+  // ❗ KHÔNG bắt buộc, vì có thể dùng file hoặc giữ ảnh cũ
+  hinhAnh: z.string().optional(),
   maNhom: z.string().min(1, "Vui lòng nhập mã nhóm"),
   ngayTao: z.string().min(1, "Vui lòng chọn ngày tạo"),
   maDanhMucKhoaHoc: z.string().min(1, "Vui lòng chọn danh mục"),
@@ -84,7 +81,7 @@ export default function EditCourse({ maKhoaHoc, onSuccess, onCancel }: Props) {
   const currentUser = useAuthStore((s) => s.user);
   const taiKhoanDangNhap = currentUser?.taiKhoan ?? "";
 
-  // detail khóa học
+  // chi tiết khóa học
   const {
     data: courseDetail,
     isLoading: loadingDetail,
@@ -109,9 +106,9 @@ export default function EditCourse({ maKhoaHoc, onSuccess, onCancel }: Props) {
     handleSubmit,
     register,
     control,
-    watch,
     formState: { errors, isSubmitting },
     setValue,
+    watch,
   } = useForm<EditCourseForm>({
     resolver: zodResolver(schema as any),
     defaultValues: {
@@ -119,9 +116,8 @@ export default function EditCourse({ maKhoaHoc, onSuccess, onCancel }: Props) {
       biDanh: "",
       tenKhoaHoc: "",
       moTa: "",
-      luotXem: 0 as unknown as any,
-      danhGia: 0 as unknown as any,
-      hinhAnh: "",
+      luotXem: 0 as any,
+      danhGia: 0 as any,
       maNhom: "GP01",
       ngayTao: "",
       maDanhMucKhoaHoc: "",
@@ -129,16 +125,16 @@ export default function EditCourse({ maKhoaHoc, onSuccess, onCancel }: Props) {
     },
   });
 
-  // --- NEW: Chọn file + preview (giống AddCourse) ---
   const [localPreview, setLocalPreview] = useState<string>("");
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const fileRef = useRef<HTMLInputElement | null>(null);
+
   const handlePickFile = (file?: File | null) => {
     if (!file) return;
+    setSelectedFile(file);
     setLocalPreview(URL.createObjectURL(file));
-    // đồng bộ cách làm bên AddCourse: set tên file vào hinhAnh
-    setValue("hinhAnh", file.name, { shouldValidate: true });
   };
-  // ---------------------------------------------------
+  // -------------------
 
   useEffect(() => {
     if (!courseDetail) return;
@@ -159,26 +155,43 @@ export default function EditCourse({ maKhoaHoc, onSuccess, onCancel }: Props) {
       "";
     setValue("maDanhMucKhoaHoc", String(maDM));
     setValue("taiKhoanNguoiTao", taiKhoanDangNhap);
-    // reset preview khi load detail
+
     setLocalPreview("");
+    setSelectedFile(null);
   }, [courseDetail, setValue, taiKhoanDangNhap]);
 
   const { mutate: handleEditCourse, isPending } = useMutation({
-    mutationFn: (payload: EditCourseForm) => {
-      const body = {
-        maKhoaHoc: payload.maKhoaHoc,
-        biDanh: payload.biDanh,
-        tenKhoaHoc: payload.tenKhoaHoc,
-        moTa: payload.moTa ?? "",
-        luotXem: Number(payload.luotXem) || 0,
-        danhGia: Number(payload.danhGia) || 0,
-        hinhAnh: payload.hinhAnh,
-        maNhom: payload.maNhom || "GP01",
-        ngayTao: toDDMMYYYY(payload.ngayTao),
-        maDanhMucKhoaHoc: payload.maDanhMucKhoaHoc,
-        taiKhoanNguoiTao: payload.taiKhoanNguoiTao || taiKhoanDangNhap,
-      };
-      return updateCourseApi(body);
+    mutationFn: async (payload: EditCourseForm) => {
+      const urlImg = (payload.hinhAnh || "").trim();
+      if (!selectedFile && urlImg && !imagePattern.test(urlImg)) {
+        throw new Error(
+          "URL hình ảnh không đúng định dạng (.png/.jpg/.jpeg/.webp/.gif)"
+        );
+      }
+
+      const fd = new FormData();
+      fd.append("maKhoaHoc", payload.maKhoaHoc);
+      fd.append("biDanh", payload.biDanh);
+      fd.append("tenKhoaHoc", payload.tenKhoaHoc);
+      fd.append("moTa", payload.moTa ?? "");
+      fd.append("luotXem", String(Number(payload.luotXem) || 0));
+      fd.append("danhGia", String(Number(payload.danhGia) || 0));
+      fd.append("maNhom", payload.maNhom || "GP01");
+      fd.append("ngayTao", toDDMMYYYY(payload.ngayTao));
+      fd.append("maDanhMucKhoaHoc", payload.maDanhMucKhoaHoc);
+      fd.append(
+        "taiKhoanNguoiTao",
+        payload.taiKhoanNguoiTao || taiKhoanDangNhap
+      );
+
+      // ẢNH
+      if (selectedFile) {
+        fd.append("hinhAnh", selectedFile, selectedFile.name);
+      } else if (urlImg) {
+        fd.append("hinhAnh", urlImg);
+      }
+
+      return updateCourseApi(fd);
     },
     onSuccess: () => {
       toast.success("Cập nhật khóa học thành công ✅");
@@ -219,7 +232,6 @@ export default function EditCourse({ maKhoaHoc, onSuccess, onCancel }: Props) {
         onSubmit={handleSubmit(onSubmit)}
         className={`grid grid-cols-1 md:grid-cols-2 gap-6 text-lg ${styles.form} ${styles.twoCols}`}
       >
-        {/* Hàng 1: 2 ô */}
         <InputWithIcon
           id="maKhoaHoc"
           label="Mã khóa học"
@@ -239,7 +251,6 @@ export default function EditCourse({ maKhoaHoc, onSuccess, onCancel }: Props) {
           error={errors.tenKhoaHoc?.message}
         />
 
-        {/* Hàng 2: Danh mục (1/2) + Ngày tạo (1/2) */}
         <div className={`${styles.divSelect}`}>
           <Label
             htmlFor="maDanhMucKhoaHoc"
@@ -306,7 +317,6 @@ export default function EditCourse({ maKhoaHoc, onSuccess, onCancel }: Props) {
           error={errors.ngayTao?.message}
         />
 
-        {/* Hàng 3: Bí danh + Lượt xem */}
         <InputWithIcon
           id="biDanh"
           label="Bí danh"
@@ -326,7 +336,6 @@ export default function EditCourse({ maKhoaHoc, onSuccess, onCancel }: Props) {
           error={errors.luotXem?.message}
         />
 
-        {/* Hàng 4: Đánh giá + spacer */}
         <InputWithIcon
           id="danhGia"
           label="Đánh giá"
@@ -338,7 +347,6 @@ export default function EditCourse({ maKhoaHoc, onSuccess, onCancel }: Props) {
         />
         <div />
 
-        {/* Full width: Tài khoản người tạo */}
         <div className={`md:col-span-2 ${styles.span2}`}>
           <Label className={`text-lg ${styles.label}`}>
             Tài khoản người tạo
@@ -356,19 +364,17 @@ export default function EditCourse({ maKhoaHoc, onSuccess, onCancel }: Props) {
           />
         </div>
 
-        {/* Full width: Hình ảnh — có nút Chọn file + preview */}
         <div className={`md:col-span-2 ${styles.span2}`}>
           <Label htmlFor="hinhAnh" className={`text-lg ${styles.label}`}>
             Hình ảnh
           </Label>
-
           <div className="flex gap-3 items-start mt-1">
             <div className="flex-1">
               <InputWithIcon
                 id="hinhAnh"
                 label=""
                 icon={<ImageIcon size={14} />}
-                placeholder="Dán URL hoặc bấm 'Chọn file'"
+                placeholder="Dán URL (nếu muốn đổi ảnh bằng URL) hoặc bấm 'Chọn file'"
                 {...register("hinhAnh")}
                 error={errors.hinhAnh?.message}
               />
@@ -395,7 +401,7 @@ export default function EditCourse({ maKhoaHoc, onSuccess, onCancel }: Props) {
 
           {(localPreview || imagePattern.test(watch("hinhAnh") || "")) && (
             <img
-              src={localPreview || watch("hinhAnh")}
+              src={localPreview || watch("hinhAnh")!}
               alt="preview"
               className={`mt-3 h-28 w-28 object-cover rounded-md border ${styles.imgPreview}`}
               onError={() => setLocalPreview("")}
@@ -403,7 +409,6 @@ export default function EditCourse({ maKhoaHoc, onSuccess, onCancel }: Props) {
           )}
         </div>
 
-        {/* Full width: Mô tả */}
         <div className={`md:col-span-2 ${styles.span2}`}>
           <Label className={`text-lg ${styles.label}`}>Mô tả khóa học</Label>
           <textarea
@@ -417,7 +422,6 @@ export default function EditCourse({ maKhoaHoc, onSuccess, onCancel }: Props) {
           )}
         </div>
 
-        {/* Full width: Nút */}
         <div
           className={`md:col-span-2 flex flex-wrap items-center justify-end gap-2 text-lg ${styles.span2}`}
         >
