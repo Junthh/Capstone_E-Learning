@@ -325,7 +325,7 @@ export default function UserManagement() {
                   {(u as any).soDt ?? (u as any).soDT ?? "-"}
                 </TableCell>
                 <TableCell className={`px-4 py-3 text-center text-lg`}>
-                  <div className={`${styles.actions} flex flex-wrap items-center justify-center gap-2 text-lg`}>
+                  <div className={`${styles.actions} flex flex-wrap items-center justify-center gap-1 text-lg`}>
                     <Button
                       size="lg"
                       variant="outline"
