@@ -1,4 +1,4 @@
-import type { AddCourse, Course, DetailCourse, SimpleCourse } from '@/interfaces/course.interface';
+import type { Course, DetailCourse, SimpleCourse } from '@/interfaces/course.interface';
 import type { RegisterCourseRequest, UnregisterCourseRequest, UserCourseDetail } from '@/interfaces/course.interface';
 import api from './api';
 import type { pageResult } from '@/interfaces/pageResult.interface';
