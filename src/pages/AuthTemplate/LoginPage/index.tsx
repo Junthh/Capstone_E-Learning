@@ -11,6 +11,7 @@ import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import styles from "./LoginPage.module.css";
 import { Home } from "lucide-react";
+import { toast } from "sonner";
 
 const schema = z.object({
   taiKhoan: z.string().nonempty("Tài khoản không được để trống"),
@@ -30,7 +31,17 @@ export default function LoginPage() {
       setUser(currentUser);
       navigate(
         currentUser.maLoaiNguoiDung === "GV" ? "/admin/user-management" : "/"
-      );
+      )
+    },
+     onError: (err: any) => {
+      const msg =
+        err?.response?.data?.content ||
+        err?.response?.data?.message ||
+        err?.response?.data ||
+        err?.message ||
+        "Có lỗi xảy ra";
+      toast.error(String(msg));
+      console.error("Add course failed:", err);
     },
   });
 
@@ -105,7 +116,7 @@ export default function LoginPage() {
 
               <Button
                 type="submit"
-                className={`${styles.btn} cursor-pointer`}
+                className={`${styles.btn} cursor-pointer `}
                 disabled={isPending}
               >
                 {isPending ? "Đang đăng nhập..." : "Đăng nhập"}

@@ -3,19 +3,10 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
+  Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
 } from "@/components/ui/table";
 import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
+  Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger,
 } from "@/components/ui/dialog";
 import AddUser from "./AddUser/AddUser";
 import EditUser from "./EditUser/EditUser";
@@ -64,11 +55,28 @@ export default function UserManagement() {
     refetchOnWindowFocus: false,
   });
 
+  // 🔄 Làm mới dữ liệu sau Add/Edit
+  const refreshUsers = async () => {
+    // invalidate list phân trang
+    await queryClient.invalidateQueries({ queryKey: ["manager-user"], exact: false });
+
+    // nếu đang search → refetch lại kho allUsers
+    // reset cờ để fetchAllUsers chạy lại
+    setAllLoaded(false);
+    setAllUsers([]);
+    firstAllLoadTriggered.current = false;
+
+    if (isSearching) {
+      await fetchAllUsers(true); // force
+    }
+  };
+
   const { mutate: deteleUser } = useMutation({
     mutationFn: (taiKhoan: string) => deleteUserApi(taiKhoan),
     onSuccess: (_, taiKhoan) => {
       toast.success("Đã xoá người dùng thành công!");
       queryClient.invalidateQueries({ queryKey: ["manager-user"] });
+      // cập nhật bộ nhớ search tại chỗ cho mượt
       setAllUsers((prev) => prev.filter((u) => u.taiKhoan !== taiKhoan));
     },
     onError: () => {
@@ -87,8 +95,10 @@ export default function UserManagement() {
 
   const isSearching = debouncedTuKhoa.length > 0;
 
-  const fetchAllUsers = async () => {
-    if (loadingAll || allLoaded) return;
+  const fetchAllUsers = async (force = false) => {
+    if (!force) {
+      if (loadingAll || allLoaded) return;
+    }
     setLoadingAll(true);
     try {
       const BIG_SIZE = 1000;
@@ -124,7 +134,7 @@ export default function UserManagement() {
       firstAllLoadTriggered.current = true;
       void fetchAllUsers();
     }
-  }, [isSearching]);
+  }, [isSearching, allLoaded]);
 
   const filteredItems = useMemo(() => {
     const key = normalizeVN(debouncedTuKhoa);
@@ -155,7 +165,7 @@ export default function UserManagement() {
 
   const handleRegisterCourse = (taiKhoan: string) => {
     setEditingAccount(taiKhoan);
-    setOpenRegister(true); // 👈 mở dialog ghi danh
+    setOpenRegister(true);
   };
 
   const loading = isSearching
@@ -182,7 +192,6 @@ export default function UserManagement() {
             </div>
           )}
 
-          {/* search: thêm styles.searchBox */}
           <div className={`${styles.searchBox} relative w-96`}>
             <Input
               type="text"
@@ -206,7 +215,7 @@ export default function UserManagement() {
             </svg>
           </div>
 
-          {/* Dialog addUser */}
+          {/* Thêm người dùng */}
           <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
               <Button
@@ -221,12 +230,16 @@ export default function UserManagement() {
                 <DialogTitle className="text-xl">Thêm người dùng</DialogTitle>
               </DialogHeader>
               <AddUser
-                onSuccess={() => setOpen(false)}
+                onSuccess={async () => {
+                  setOpen(false);
+                  await refreshUsers(); // ✅ làm mới list + search
+                }}
                 onCancel={() => setOpen(false)}
               />
             </DialogContent>
           </Dialog>
 
+          {/* Sửa người dùng */}
           <Dialog open={openEdit} onOpenChange={setOpenEdit}>
             <DialogContent className="sm:max-w-[640px]">
               <DialogHeader>
@@ -235,13 +248,17 @@ export default function UserManagement() {
               {editingAccount && (
                 <EditUser
                   taiKhoan={editingAccount}
-                  onSuccess={() => setOpenEdit(false)}
+                  onSuccess={async () => {
+                    setOpenEdit(false);
+                    await refreshUsers(); // ✅ làm mới list + search
+                  }}
                   onCancel={() => setOpenEdit(false)}
                 />
               )}
             </DialogContent>
           </Dialog>
 
+          {/* Ghi danh khoá học cho user */}
           <Dialog open={openRegister} onOpenChange={setOpenRegister}>
             <DialogContent className="sm:max-w-[820px]">
               <DialogHeader>
@@ -259,129 +276,91 @@ export default function UserManagement() {
         </div>
       </div>
 
-      {/* bảng: thêm styles.tableWrap + styles.table */}
+      {/* Bảng */}
       <div className={`${styles.tableCard} ${styles.tableWrap}`}>
-        <Table
-          className={`${styles.table} ${styles.compact} table-fixed w-full text-gray-700 text-lg`}
-        >
+        <Table className={`${styles.table} ${styles.compact} table-fixed w-full text-gray-700 text-lg`}>
           <TableHeader className="bg-gray-50 text-gray-600">
             <TableRow className="divide-x divide-gray-300">
-              <TableHead className="px-4 py-3 w-[7%] text-center text-lg">
-                STT
-              </TableHead>
-              <TableHead className="px-4 py-3 w-[13%] text-center text-lg">
-                Tài khoản
-              </TableHead>
-              <TableHead className="px-4 py-3 w-[10%] text-center text-lg">
-                Người dùng
-              </TableHead>
-              <TableHead className="px-4 py-3 w-[15%] text-center text-lg">
-                Họ và tên
-              </TableHead>
-              <TableHead className="px-4 py-3 w-[21%] text-center text-lg">
-                Email
-              </TableHead>
-              <TableHead className="px-4 py-3 w-[12%] text-center text-lg">
-                Số điện thoại
-              </TableHead>
-              <TableHead className="px-4 py-3 w-[22%] text-center text-lg">
-                Hành động
-              </TableHead>
+              <TableHead className="px-4 py-3 w-[7%] text-center text-lg">STT</TableHead>
+              <TableHead className="px-4 py-3 w-[13%] text-center text-lg">Tài khoản</TableHead>
+              <TableHead className="px-4 py-3 w-[10%] text-center text-lg">Người dùng</TableHead>
+              <TableHead className="px-4 py-3 w-[15%] text-center text-lg">Họ và tên</TableHead>
+              <TableHead className="px-4 py-3 w-[21%] text-center text-lg">Email</TableHead>
+              <TableHead className="px-4 py-3 w-[12%] text-center text-lg">Số điện thoại</TableHead>
+              <TableHead className="px-4 py-3 w-[22%] text-center text-lg">Hành động</TableHead>
             </TableRow>
           </TableHeader>
 
           <TableBody>
             {loading && (
               <TableRow>
-                <TableCell className="py-6 text-center" colSpan={7}>
-                  Đang tải...
-                </TableCell>
+                <TableCell className="py-6 text-center" colSpan={7}>Đang tải...</TableCell>
               </TableRow>
             )}
 
             {!loading && !isError && filteredItems.length === 0 && (
               <TableRow>
-                <TableCell className="py-6 text-center" colSpan={7}>
-                  Không có dữ liệu.
-                </TableCell>
+                <TableCell className="py-6 text-center" colSpan={7}>Không có dữ liệu.</TableCell>
               </TableRow>
             )}
 
-            {!loading &&
-              !isError &&
-              filteredItems.map((u, idx) => (
-                <TableRow
-                  key={`${u.taiKhoan}-${idx}`}
-                  className="divide-x divide-gray-300"
-                >
-                  <TableCell
-                    className={`px-4 py-3 text-center text-lg ${styles.nowrap}`}
-                  >
-                    {getStt(idx)}
-                  </TableCell>
-                  <TableCell
-                    className={`px-4 py-3 text-center text-lg ${styles.nowrap}`}
-                  >
-                    {(u.taiKhoan ?? "").trim()}
-                  </TableCell>
-                  <TableCell
-                    className={`px-4 py-3 text-center text-lg ${styles.nowrap}`}
-                  >
-                    {u.tenLoaiNguoiDung}
-                  </TableCell>
-                  <TableCell className="px-4 py-3 text-left text-lg whitespace-normal break-words">
-                    {u.hoTen}
-                  </TableCell>
-                  <TableCell className="px-4 py-3 text-left text-lg whitespace-normal break-words">
-                    {u.email}
-                  </TableCell>
-                  <TableCell
-                    className={`px-4 py-3 text-center text-lg ${styles.nowrap}`}
-                  >
-                    {(u as any).soDt ?? (u as any).soDT ?? "-"}
-                  </TableCell>
-                  <TableCell className={`px-4 py-3 text-center text-lg`}>
-                    <div
-                      className={`${styles.actions} flex flex-wrap items-center justify-center gap-2 text-lg`}
+            {!loading && !isError && filteredItems.map((u, idx) => (
+              <TableRow key={`${u.taiKhoan}-${idx}`} className="divide-x divide-gray-300">
+                <TableCell className={`px-4 py-3 text-center text-lg ${styles.nowrap}`}>
+                  {getStt(idx)}
+                </TableCell>
+                <TableCell className={`px-4 py-3 text-center text-lg ${styles.nowrap}`}>
+                  {(u.taiKhoan ?? "").trim()}
+                </TableCell>
+                <TableCell className={`px-4 py-3 text-center text-lg ${styles.nowrap}`}>
+                  {u.tenLoaiNguoiDung}
+                </TableCell>
+                <TableCell className="px-4 py-3 text-left text-lg whitespace-normal break-words">
+                  {u.hoTen}
+                </TableCell>
+                <TableCell className="px-4 py-3 text-left text-lg whitespace-normal break-words">
+                  {u.email}
+                </TableCell>
+                <TableCell className={`px-4 py-3 text-center text-lg ${styles.nowrap}`}>
+                  {(u as any).soDt ?? (u as any).soDT ?? "-"}
+                </TableCell>
+                <TableCell className={`px-4 py-3 text-center text-lg`}>
+                  <div className={`${styles.actions} flex flex-wrap items-center justify-center gap-2 text-lg`}>
+                    <Button
+                      size="lg"
+                      variant="outline"
+                      className={`${styles.iconAction} text-lg bg-green-600 text-white hover:bg-green-700 hover:text-white cursor-pointer`}
+                      onClick={() => handleRegisterCourse(u.taiKhoan)}
                     >
-                      {/* Ghi danh */}
-                      <Button
-                        size="lg"
-                        variant="outline"
-                        className={`${styles.iconAction} text-lg bg-green-600 text-white hover:bg-green-700 hover:text-white cursor-pointer`}
-                        onClick={() => handleRegisterCourse(u.taiKhoan)}
-                      >
-                        <span className="hidden sm:inline">Ghi Danh</span>
-                        <UserPlus className="block sm:hidden w-4 h-4" />{" "}
-                        {/* 👈 hiện icon khi mobile */}
-                      </Button>
+                      <span className="hidden sm:inline">Ghi Danh</span>
+                      <UserPlus className="block sm:hidden w-4 h-4" />
+                    </Button>
 
-                      {/* Sửa */}
-                      <Button
-                        size="lg"
-                        variant="outline"
-                        className={`${styles.iconAction} text-lg bg-yellow-400 text-black hover:bg-yellow-500 cursor-pointer`}
-                        onClick={() => handleEditUser(u.taiKhoan)}
-                      >
-                        <span className="hidden sm:inline">Sửa</span>
-                        <Pencil className="block sm:hidden w-4 h-4" />
-                      </Button>
-                      {/* Xoá */}
-                      <Button
-                        size="lg"
-                        variant="outline"
-                        className={`${styles.iconAction} text-lg bg-red-600 text-white hover:bg-red-700 hover:text-white cursor-pointer`}
-                        onClick={() => handleDeleteUser(u.taiKhoan)}
-                      >
-                        <span className="hidden sm:inline">
-                          {deletingId === u.taiKhoan ? "Đang xoá..." : "Xoá"}
-                        </span>
-                        <Trash2 className="block sm:hidden w-4 h-4" />
-                      </Button>
-                    </div>
-                  </TableCell>
-                </TableRow>
-              ))}
+                    <Button
+                      size="lg"
+                      variant="outline"
+                      className={`${styles.iconAction} text-lg bg-yellow-400 text-black hover:bg-yellow-500 cursor-pointer`}
+                      onClick={() => handleEditUser(u.taiKhoan)}
+                    >
+                      <span className="hidden sm:inline">Sửa</span>
+                      <Pencil className="block sm:hidden w-4 h-4" />
+                    </Button>
+
+                    <Button
+                      size="lg"
+                      variant="outline"
+                      className={`${styles.iconAction} text-lg bg-red-600 text-white hover:bg-red-700 hover:text-white cursor-pointer`}
+                      onClick={() => handleDeleteUser(u.taiKhoan)}
+                    >
+                      <span className="hidden sm:inline">
+                        {deletingId === u.taiKhoan ? "Đang xoá..." : "Xoá"}
+                      </span>
+                      <Trash2 className="block sm:hidden w-4 h-4" />
+                    </Button>
+                  </div>
+                </TableCell>
+              </TableRow>
+            ))}
           </TableBody>
         </Table>
       </div>

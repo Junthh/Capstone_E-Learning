@@ -2,7 +2,6 @@ import type { AddCourse, Course, DetailCourse, SimpleCourse } from '@/interfaces
 import type { RegisterCourseRequest, UnregisterCourseRequest, UserCourseDetail } from '@/interfaces/course.interface';
 import api from './api';
 import type { pageResult } from '@/interfaces/pageResult.interface';
-import type { BaseApiResponse } from '@/interfaces/base.interface';
 
 // api lấy danh sách khóa học
 export const getCourseListApi = async (): Promise<Course[]> => {
@@ -140,10 +139,9 @@ export const getCoursePageSizeApi = async (
 };
 
 
-export const addCourseApi = async (data: AddCourse) => {
+export const addCourseApi = async (form: FormData) => {
   try {
-    const res = await api.post("/QuanLyKhoaHoc/ThemKhoaHoc", data, {
-      headers: { "Content-Type": "application/json" },
+    const res = await api.post("QuanLyKhoaHoc/ThemKhoaHocUploadHinh", form, {
     });
     return res.data?.content ?? res.data;
   } catch (error) {
@@ -176,12 +174,12 @@ export const deleteCourseApi = async (maKhoaHoc: string) => {
 };
 
 
-export const updateCourseApi = async (data: AddCourse) => {
+export const updateCourseApi = async (form: FormData) => {
   try {
-    const url = `/QuanLyKhoaHoc/CapNhatKhoaHoc`;
-    const body = { ...data, maNhom: data.maNhom || "GP01" };
-    const response = await api.put<BaseApiResponse<AddCourse>>(url, body);
-    return response.data.content;
+    const url = `/QuanLyKhoaHoc/CapNhatKhoaHocUpload`;
+    const response = await api.post(url, form, {
+    });
+    return response.data?.content;
   } catch (error) {
     console.error("Edit course failed:", error);
     throw error;
