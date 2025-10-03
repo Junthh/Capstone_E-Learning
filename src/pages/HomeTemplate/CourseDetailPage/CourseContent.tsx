@@ -36,16 +36,6 @@ export default function CourseContent({ course }: { course: Course }) {
               <Info label="Ngày tạo:" value={course.ngayTao} />
             </div>
           </div>
-
-          <div className="bg-orange-50 rounded-lg p-6 border border-orange-200">
-            <h3 className="text-lg font-semibold text-orange-800 mb-4">Đăng ký ngay hôm nay!</h3>
-            <p className="text-orange-700 mb-4">
-              Tham gia cùng {course.soLuongHocVien} học viên khác và bắt đầu hành trình học tập của bạn.
-            </p>
-            <Button className="w-full bg-orange-500 hover:bg-orange-600 text-white font-semibold">
-              ĐĂNG KÝ NGAY
-            </Button>
-          </div>
         </div>
       </div>
     </section>
