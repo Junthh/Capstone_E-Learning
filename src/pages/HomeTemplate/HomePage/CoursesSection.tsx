@@ -47,7 +47,7 @@ export default function CoursesSection() {
             <Button 
               size="lg" 
               onClick={handleLoadMore}
-              className="bg-orange-500 hover:bg-orange-600 text-white px-8 py-3"
+              className="bg-orange-500 hover:bg-orange-600 text-white px-8 py-3 cursor-pointer"
             >
               Xem thêm khóa học
             </Button>
