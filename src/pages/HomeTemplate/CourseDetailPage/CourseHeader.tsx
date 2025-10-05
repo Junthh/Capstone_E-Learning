@@ -85,7 +85,7 @@ export default function CourseHeader({ course }: { course: Course }) {
           <div className="flex flex-col sm:flex-row gap-4">
             <Button 
               size="lg" 
-              className="bg-yellow-500 hover:bg-yellow-600 text-black font-semibold px-8 py-4 text-lg disabled:opacity-50 disabled:cursor-not-allowed"
+              className="bg-yellow-500 hover:bg-yellow-600 text-black font-semibold px-8 py-4 text-lg disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
               onClick={handleRegisterCourse}
               disabled={isRegistering}
             >
@@ -98,7 +98,7 @@ export default function CourseHeader({ course }: { course: Course }) {
                 'ĐĂNG KÝ NGAY'
               )}
             </Button>
-            <Button size="lg" variant="outline" className="bg-transparent border-white text-white hover:bg-white hover:text-black px-8 py-4 text-lg">
+            <Button size="lg" variant="outline" className="bg-transparent border-white text-white hover:bg-white hover:text-black px-8 py-4 text-lg cursor-pointer">
               XEM DEMO
             </Button>
           </div>

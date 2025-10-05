@@ -44,7 +44,7 @@ export default function HeroSection() {
             <div className="flex flex-col sm:flex-row gap-4">
               <Button 
                 size="lg"
-                className="bg-yellow-500 hover:bg-yellow-600 text-black font-semibold px-8 py-4 text-lg"
+                className="bg-yellow-500 hover:bg-yellow-600 text-black font-semibold px-8 py-4 text-lg cursor-pointer"
                 onClick={handleScrollToCourses}
               >
                 Xem khóa học
@@ -52,7 +52,7 @@ export default function HeroSection() {
               <Button 
                 size="lg"
                 variant="outline"
-                className="bg-white text-black hover:bg-gray-400 font-semibold px-8 py-4 text-lg"
+                className="bg-white text-black hover:bg-gray-400 font-semibold px-8 py-4 text-lg cursor-pointer"
                 onClick={() => window.open("https://www.facebook.com/messages/t/231169113737422", "_blank")}
               >
                 Tư vấn học

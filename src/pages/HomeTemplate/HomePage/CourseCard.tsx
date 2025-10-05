@@ -73,7 +73,7 @@ export default function CourseCard({ course }: CourseCardProps) {
         </div>
 
         <Button 
-          className="w-full bg-yellow-400 hover:bg-yellow-500 text-black font-semibold"
+          className="w-full bg-yellow-400 hover:bg-yellow-500 text-black font-semibold cursor-pointer"
           onClick={(e) => {
             e.stopPropagation() // ngăn chặn sự kiện click lan ra thẻ cha 
             handleRegisterClick()
